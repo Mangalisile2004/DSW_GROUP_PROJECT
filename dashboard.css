@@ -1,0 +1,220 @@
+.dashboard-header {
+  background: linear-gradient(to right, #00cc7e, #00d9ff);
+  color: white;
+  padding: 15px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-style: italic;
+  font-weight: 700;
+}
+
+.btn-logout {
+  background-color: #f97316;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-logout:hover { background-color: #e65c00; }
+
+.dashboard-container {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: #f4f6f8;
+}
+
+/* Left Panel */
+.dashboard-left {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-left h2 {
+  color: teal;
+  margin-bottom: 10px;
+}
+
+.profile-photo {
+  text-align: center;
+  margin: 15px 0;
+}
+
+.profile-photo img {
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+}
+
+.btn-upload {
+  margin-top: 10px;
+  background: teal;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.btn-upload:hover { background: #009688; }
+
+.btn-edit, .btn-favorites {
+  display: block;
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-edit { background: #22c55e; color: white; }
+.btn-favorites { background: #f97316; color: white; }
+.btn-edit:hover { background: #16a34a; }
+.btn-favorites:hover { background: #e65c00; }
+
+.tip {
+  font-size: 13px;
+  color: #666;
+  margin-top: 10px;
+}
+
+/* Center Panel */
+.dashboard-center {
+  flex: 2;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-center h2 {
+  color: teal;
+  margin-bottom: 5px;
+}
+
+.search-bar {
+  display: flex;
+  margin: 15px 0;
+}
+.search-bar input {
+  flex: 1;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px 0 0 6px;
+}
+.search-bar button {
+  background: teal;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+}
+.search-bar button:hover { background: #009688; }
+
+.service-categories {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.service-categories .card {
+  flex: 1 1 200px;
+  height: 150px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  background-size: cover;       /* make image fill card */
+  background-position: center;
+}
+.service-categories .card:hover { opacity: 0.9; }
+.card.tutoring {
+  background-image: url('https://images.squarespace-cdn.com/content/v1/5cd9c98b0490791c5de0b3ae/1585198015819-1GIW0KQA2TQ4DMI0MZQK/Smart+Schools+Adult+High+School+Diploma+Program+School+Counselors');
+}
+.card.photography {
+  background-image: url('https://storage.googleapis.com/photographyfan/img/photography-genres.jpg'); 
+}
+.card.design {
+  background-image: url('https://www.unite.ai/wp-content/uploads/2023/05/AI-Graphic-design-tools-1000x600.png'); 
+}
+.card.beauty {
+  background-image: url('https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9');
+}
+
+.btn-browse {
+  background: #22c55e;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn-browse:hover { background: #16a34a; }
+
+/* Right Panel */
+.dashboard-right {
+  flex: 1;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.dashboard-right h3 {
+  color: teal;
+  margin-bottom: 10px;
+}
+
+.dashboard-right ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 10px 0;
+}
+.dashboard-right li {
+  margin-bottom: 6px;
+  font-size: 14px;
+}
+
+.dashboard-right a {
+  color: #f97316;
+  text-decoration: none;
+  font-weight: 600;
+}
+.dashboard-right a:hover { text-decoration: underline; }
+
+/* Footer */
+.dashboard-footer {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  padding: 15px;
+  background: #00d9ff;
+}
+
+.dashboard-footer button {
+  background: teal;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.dashboard-footer button:hover { background: #009688; }
