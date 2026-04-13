@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Connect</title>
+     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+     <link rel="stylesheet" href="style.css">
+</head>
+<body>
+        <header>
+        <div class="logo">
+            <h1><i>Campus Connect</i></h1>
+        </div>
+        <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+        <nav class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#about">About</a>
+            <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+            <a href="#" onclick="showAlert('Contact')">Contact</a>
+        </nav>
+    
+        <div class="auth-buttons">
+            <a href="dashboard.html">
+              <button class="btn-login">Login</button>
+            </a>
+            <button class="btn-signup" onclick="showAlert('Sign Up')">Sign Up</button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>
+            Turn Your <span style="color: orange;">Talent</span> Into 
+            <span style="color: orange;">Income</span>!
+        </h1>
+        <p>Discover And Promote Student Skills On Campus</p>
+        <button class="btn-teal" onclick="showAlert('Find Services')">Find Services</button>
+        <button class="btn-orange" onclick="showAlert('Start Your Hustle')">Start Your Hustle</button>
+    </section>
+    <hr>
+    <section class="about" id="about">
+        <h2>About Campus Connect</h2>
+        <p>
+            Campus Connect is a student-empowered marketplace designed to help UJ students turn their everyday skills into real income. 
+        </p>
+        <p>This platform gives studentprenuers a chance to showcase their talent and connect with others on campus.</p>
+        <p>From braiding, nails services, photography and design, Campus Connect bridges the gap by making it easy
+            to discover services, support fellow students and build a network all in one place.
+        </p>
+        <hr>
+    </section>
+    <section class="features">
+    <div class="feature">
+      <h3>Find Student Service</h3>
+      <p>Find help for any task</p>
+    </div>
+    <div class="feature">
+      <h3>Promote Your Hustle</h3>
+      <p>Share your skills & services</p>
+    </div>
+    <div class="feature">
+      <h3>Earn & Connect</h3>
+      <p>Network & make money</p>
+    </div>
+    </section>
+
+    <section class="services">
+    <h2>Popular Services on Campus</h2>
+    <p>Explore what's trending</p>
+        <div class="cards">
+        <div class="card tutoring">
+        <h4>Tutoring</h4>
+        <p>Academic Help</p>
+      </div>
+        <div class="card photography">
+        <h4>Photography</h4>
+        <p>Photo & Video</p>
+      </div>
+      <div class="card design">
+        <h4>Graphic Design</h4>
+        <p>Logos & Flyers</p>
+      </div>
+      <div class="card beauty">
+        <h4>Hair & Beauty</h4>
+        <p>Styling & Makeup</p>
+      </div>
+    </div>
+    </section>
+
+    <section class="footer-banner">
+    <h2>Join Campus Connect Today!</h2>
+    <p>Sign Up & Start Earning</p>
+    <button onclick="showAlert('Get Started')">Get Started</button>
+
+    <hr class="footer-divider">
+    
+    <div class="footer-contact">
+    <p>CONTACT US: CampusConnect@uni.ac.za</p>
+    <div class="social-icons">
+        <a href="#" class="facebook"></a>
+        <a href="#" class="tiktok"></a>
+        <a href="#" class="linkedin"></a>
+        <a href="#" class="X"></a>
+    </div>
+  </div>
+  </section> 
+</body>
+</html>
+
+
