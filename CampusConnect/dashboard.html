@@ -3,64 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Campus Connect dashboard</title>
     <link rel="stylesheet" href="dashboard.css">
 </head>
 <body>
-    <header class="dashboard-header">
-        <h1>Campus Connect</h1>
-        <button>Logout</button>
-    </header>
-
-    <div class="container">
-        <aside class="sidebar">
-            <h2>Menu</h2>
-            <ul>
-                <li><a href="#">My Profile</a></li>
-                <li><a href="#">Find Services</a></li>
-                <li><a href="#">My bookings</a></li>
-            </ul>
-        </aside>
-
-        <main class="content">
-            <section class="card">
-                <h2>My Profile</h2>
-                <div class="Profile">
-                    <div>
-                        <p><strong>Name:</strong>Mbali</p>
-                        <p><strong>Email:</strong>mbalenhlemthembu@gmail.com</p>
-                        <button>Edit Profile</button>
-                    </div>
-                </div>
-            </section>
-            
-            <section class="card">
-                <h2>Find Services</h2>
-                <input type="text" placeholder="Serch for services...">
-                <button>Search</button>
-                <div class="services">
-                    <div class="service-card">
-                        <h3>Tutoring</h3>
-                        <p>Academic help</p>
-                        <button>Book</button>
-                    </div>
-                    <div class="service-card">
-                        <h3>Photography</h3>
-                        <p>Events and potraits</p>
-                        <button>Book</button>
-                    </div>
-                </div>
-            </section>
-
-            <section class="card">
-                <h2>My Bookings</h2>
-                <ul>
-                    <li>Tutoring - April 20</li>
-                    <li>Braiding -April 15</li>
-                </ul>
-            </section>
-        </main>
+    <!-- Top Bar -->
+  <header class="dashboard-header">
+    <div class="logo">
+      <h1><i>Campus Connect</i></h1>
     </div>
-    
+    <button class="btn-logout">Logout</button>
+  </header>
+
+  <main class="dashboard-container">
+    <!-- Left Panel -->
+    <aside class="dashboard-left">
+      <h2>Welcome, <span id="user-name">Student</span>!</h2>
+      <p>Ready to find services on campus?</p>
+      <div class="profile-photo">
+        <img src="https://via.placeholder.com/120" alt="Profile Photo">
+        <button class="btn-upload">Upload Photo</button>
+      </div>
+      <p><strong id="full-name">Full Name</strong></p>
+      <p id="student-id">Student ID: </p>
+      <button class="btn-edit">Edit Profile</button>
+      <button class="btn-favorites">My Favorites</button>
+      <p class="tip">Add a photo to personalize your experience!</p>
+    </aside>
+
+    <!-- Center Panel -->
+    <section class="dashboard-center">
+      <h2>Discover Services</h2>
+      <p>Find help from fellow students!</p>
+      <div class="search-bar">
+        <input type="text" placeholder="Search for services...">
+        <button>🔍</button>
+      </div>
+      <div class="service-categories">
+        <div class="card tutoring">Tutoring</div>
+        <div class="card photography">Photography</div>
+        <div class="card design">Graphic Design</div>
+        <div class="card beauty">Hair & Beauty</div>
+      </div>
+      <button class="btn-browse">Browse Providers</button>
+    </section>
+
+    <!-- Right Panel -->
+    <aside class="dashboard-right">
+      <div class="recommended">
+        <h3>Recommended for You</h3>
+        <ul>
+          <li>John – Math Tutor</li>
+          <li>Lerato – Writing Coach</li>
+          <li>Sam – Fitness Trainer</li>
+        </ul>
+        <a href="#">See All</a>
+      </div>
+      <div class="updates">
+        <h3>Latest Updates</h3>
+        <ul>
+          <li>New: 4 tutors available near you!</li>
+          <li>Reminder: Complete your profile for best matches!</li>
+        </ul>
+      </div>
+    </aside>
+  </main>
+
+  <!-- Bottom Section -->
+  <footer class="dashboard-footer">
+    <button class="btn-messages">💬 Messages</button>
+    <button class="btn-saved">❤️ Saved Listings</button>
+  </footer>
+<script src="dashboard.js"></script> 
 </body>
 </html>
