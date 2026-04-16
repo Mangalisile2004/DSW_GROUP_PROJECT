@@ -301,7 +301,9 @@ header h1 {
 .tiktok   { background-image: url('https://locusmag.com/wp-content/uploads/2023/07/tiktok.jpg'); }
 .linkedin { background-image: url('https://disinfocode.eu/images/microsoft-linkedin1742289593.png'); }
 
-/* Modal background */
+/* ===== Popup Signup Modal Styling ===== */
+
+/* Modal background overlay */
 .modal {
   display: none; /* hidden by default */
   position: fixed;
@@ -309,22 +311,99 @@ header h1 {
   left: 0; top: 0;
   width: 100%; height: 100%;
   background-color: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px); /* subtle blur effect */
+  overflow: auto;
 }
 
 /* Modal box */
 .modal-content {
-  background: white;
-  margin: 10% auto;
-  padding: 20px;
-  border-radius: 8px;
+  background: #fff;
+  margin: 5% auto;
+  padding: 25px;
+  border-radius: 10px;
   width: 400px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  max-width: 90%;
+  max-height: 90vh; /* limit height to viewport */
+  overflow-y: auto; /* scroll inside modal if needed */
+  box-shadow: 0 6px 12px rgba(0,0,0,0.25);
+  animation: fadeIn 0.3s ease;
+}
+
+/* Title */
+.modal-content h2 {
+  margin-top: 0;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  color: teal;
+  text-align: center;
 }
 
 /* Close button */
 .close {
   float: right;
-  font-size: 24px;
+  font-size: 26px;
+  font-weight: bold;
   cursor: pointer;
+  color: #666;
+}
+.close:hover {
+  color: teal;
 }
 
+/* Form labels */
+.modal-content label {
+  display: block;
+  margin-top: 12px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Inputs and textarea */
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 6px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  transition: border-color 0.2s ease;
+}
+.modal-content input:focus,
+.modal-content textarea:focus {
+  border-color: teal;
+  outline: none;
+}
+
+/* Submit button */
+.modal-content button {
+  margin-top: 15px;
+  width: 100%;
+  padding: 12px;
+  background-color: teal;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+.modal-content button:hover {
+  background-color: #006666;
+}
+
+/* Response message */
+#responseMessage {
+  margin-top: 12px;
+  text-align: center;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
