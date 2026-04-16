@@ -98,6 +98,34 @@
   </section>
   <form class="signup-form" onsubmit="return validateSignupUser(event)">
 
+  <!-- Sign Up Modal -->
+<div id="signupModal" class="modal">
+  <div class="modal-content">
+    <span class="close" onclick="closeModal()">&times;</span>
+    <h2>Sign Up as a Service Seeker</h2>
+    <form id="popupSignupForm">
+      <label for="fullName">Full Name</label>
+      <input type="text" id="fullName" required>
+
+      <label for="surname">Surname</label>
+      <input type="text" id="surname" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+
+      <label for="password">Password</label>
+      <input type="password" id="password" required>
+
+      <label for="servicesNeeded">Services Needed</label>
+      <textarea id="servicesNeeded" rows="3"></textarea>
+
+      <button type="submit">Sign Up</button>
+    </form>
+    <p id="responseMessage"></p>
+  </div>
+</div>
+
+
   <script src="main.js"></script>
 
 </body>
