@@ -37,4 +37,5 @@ document.getElementById("popupSignupForm").addEventListener("submit", async func
     document.getElementById("responseMessage").innerText = "Error signing up.";
     console.error(error);
   }
+  
 });

@@ -21,6 +21,7 @@
   "dependencies": {
     "body-parser": "^2.2.2",
     "express": "^5.2.1",
-    "mssql": "^12.2.1"
+    "msnodesqlv8": "^5.1.9",
+    "mssql": "^12.3.1"
   }
 }
