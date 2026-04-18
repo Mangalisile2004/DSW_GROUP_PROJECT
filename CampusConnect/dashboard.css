@@ -205,11 +205,11 @@
   justify-content: center;
   gap: 20px;
   padding: 15px;
-  background: #00d9ff;
+  background: linear-gradient(to left, #00cc7e44, #00d9ff)
 }
 
 .dashboard-footer button {
-  background: teal;
+  background: linear-gradient(to right, rgb(15, 48, 48), #1d7585);
   color: white;
   border: none;
   padding: 10px 16px;

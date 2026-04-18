@@ -106,8 +106,7 @@ header h1 {
 .hero {
     min-height: 85vh; 
     padding: 40px 20px;
-    background: linear-gradient(to right, rgba(0,81,128,0.7), rgba(59,130,246,0.7)),
-              url('https://copilot.microsoft.com/th/id/BCO.5b126016-676c-4699-a5c6-359e2c6cac44.png') no-repeat center center;
+    background: linear-gradient(to right, rgba(0,81,128,0.7), rgba(59,130,246,0.7)), url('BackgroundImage.jpeg') no-repeat center center;
     background-size: cover;
     background-position: center;
     color: white;
