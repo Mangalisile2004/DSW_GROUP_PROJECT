@@ -218,3 +218,28 @@
   font-weight: 600;
 }
 .dashboard-footer button:hover { background: #009688; }
+
+.provider-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 20px;
+  margin: 15px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+.provider-card h3 {
+  color: #0EA5E9;
+  margin-bottom: 10px;
+}
+
+.provider-card button {
+  margin: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.book-btn { background: #06B6D4; color: #fff; }
+.contact-btn { background: #F97316; color: #fff; }
