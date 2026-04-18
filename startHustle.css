@@ -4,7 +4,6 @@
     padding: 0;
     box-sizing: border-box;
     font-family: Arial, sans-serif;
-    
 }
 
 body {
@@ -41,7 +40,7 @@ header .logo h1 {
     font-size: 1.5rem;
     color: rgb(2, 74, 74);
     cursor: pointer;
-    display: none; /* show only on mobile */
+    display: none;
 }
 
 .nav-links {
@@ -87,28 +86,25 @@ form {
     border-radius: 8px;
     box-shadow: 0 2px 8px orange;
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
-/* back-link*/
+/* back-link */
 .back-link {
-  display: inline-block;
-  font-size: 16px;
-  font-weight: 500;
-  color: #ff6600; /* orange tone to match your theme */
-  text-decoration: none;
-  margin: 10px 0;
-  transition: color 0.3s ease, transform 0.2s ease;
+    display: inline-block;
+    font-size: 16px;
+    font-weight: 500;
+    color: #ff6600;
+    text-decoration: none;
+    margin: 10px 0;
+    transition: color 0.3s ease, transform 0.2s ease;
 }
 
 .back-link:hover {
-  color: #cc5200; /* darker orange on hover */
-  transform: translateX(-3px); /* subtle left shift for effect */
+    color: #cc5200;
+    transform: translateX(-3px);
 }
 
 .back-link:active {
-  color: #993d00; /* even darker when clicked */
+    color: #993d00;
 }
 
 form h1 {
@@ -167,7 +163,7 @@ label {
     color: teal;
 }
 
-/* Portfolio Gallery Items (when images are added) */
+/* Portfolio Gallery Items */
 .portfolio-gallery img {
     width: 120px;
     height: 120px;
@@ -182,10 +178,6 @@ label {
     border-color: #3498db;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 input[type="text"],
 textarea,
 select {
@@ -200,16 +192,6 @@ textarea {
     resize: vertical;
 }
 
-.upload-box,
-.portfolio-gallery {
-    border: 2px dashed #ccc;
-    padding: 20px;
-    text-align: center;
-    cursor: pointer;
-    border-radius: 6px;
-    background: #fafafa;
-}
-
 .price-group {
     display: flex;
     gap: 10px;
@@ -218,11 +200,8 @@ textarea {
 .tags-container {
     display: flex;
     gap: 10px;
-<<<<<<< HEAD
     flex-wrap: wrap;
     align-items: center;
-=======
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 }
 
 .tags-container button {
@@ -233,14 +212,9 @@ textarea {
     border-radius: 4px;
     cursor: pointer;
 }
-<<<<<<< HEAD
 
 .tags-container button:hover {
     background: orange;
-=======
-.tags-container button:hover {
-  background: orange;
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 }
 
 .publish-btn {
@@ -257,24 +231,10 @@ textarea {
     font-weight: bold;
 }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 .publish-btn:hover {
     background: orange;
 }
 
-/* Back link */
-.back-link {
-    display: inline-block;
-    margin-bottom: 15px;
-    text-decoration: none;
-    color: orange;
-    font-weight: bold;
-}
-
-<<<<<<< HEAD
 /* ===== MESSAGE BOX STYLES ===== */
 .message-box {
     position: fixed;
@@ -392,9 +352,6 @@ textarea {
 }
 
 /* ===== RESPONSIVE DESIGN ===== */
-=======
-/* Responsive */
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
 @media (max-width: 768px) {
     .nav-links {
         display: none;
@@ -407,7 +364,6 @@ textarea {
         padding: 10px;
     }
 
-<<<<<<< HEAD
     .nav-links.active {
         display: flex;
     }
@@ -433,9 +389,3 @@ textarea {
         padding: 20px;
     }
 }
-=======
-    .menu-toggle {
-        display: block;
-    }
-}
->>>>>>> 35a9afe9fac2642f6bf54730d003b3ca9289db67
