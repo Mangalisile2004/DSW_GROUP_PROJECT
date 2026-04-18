@@ -2,15 +2,23 @@
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
-    if (sidebar) sidebar.classList.toggle('active');
-    if (overlay) overlay.classList.toggle('active');
+    if (sidebar) {
+        sidebar.classList.toggle('active');
+    }
+    if (overlay) {
+        overlay.classList.toggle('active');
+    }
 }
 
 function closeSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
-    if (sidebar) sidebar.classList.remove('active');
-    if (overlay) overlay.classList.remove('active');
+    if (sidebar) {
+        sidebar.classList.remove('active');
+    }
+    if (overlay) {
+        overlay.classList.remove('active');
+    }
 }
 
 // ===== LOGOUT FUNCTION =====
@@ -191,8 +199,10 @@ window.onclick = function(event) {
     }
 }
 
-// ===== DOM CONTENT LOADED =====
+// ===== DOM CONTENT LOADED - MAIN INITIALIZATION =====
 document.addEventListener('DOMContentLoaded', async () => {
+    console.log('DOM loaded, initializing...');
+    
     const urlParams = new URLSearchParams(window.location.search);
     const userEmail = urlParams.get('email');
 
@@ -208,32 +218,5 @@ document.addEventListener('DOMContentLoaded', async () => {
         } else {
             window.location.href = 'index.html';
         }
-    }
-
-    // Sidebar toggle setup
-    const menuToggle = document.getElementById("menuToggle");
-    const sidebar = document.getElementById("sidebar");
-    const overlay = document.getElementById("sidebarOverlay");
-
-    if (menuToggle && sidebar) {
-        menuToggle.addEventListener("click", (e) => {
-            e.stopPropagation();
-            sidebar.classList.toggle("active");
-            if (overlay) overlay.classList.toggle("active");
-        });
-
-        if (overlay) {
-            overlay.addEventListener("click", () => {
-                sidebar.classList.remove("active");
-                overlay.classList.remove("active");
-            });
-        }
-
-        document.addEventListener("keydown", (e) => {
-            if (e.key === 'Escape' && sidebar.classList.contains("active")) {
-                sidebar.classList.remove("active");
-                if (overlay) overlay.classList.remove("active");
-            }
-        });
     }
 });

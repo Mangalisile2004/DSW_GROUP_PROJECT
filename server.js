@@ -173,6 +173,51 @@ app.get("/users", async (req, res) => {
 });
 
 const PORT = 3000;
+// ===== ADD SERVICE (for providers) =====
+// ===== PROVIDER SIGNUP =====
+app.post("/provider/signup", async (req, res) => {
+    const { fullName, surname, email, studentNumber, password, serviceType, bio, hourlyRate, campus, availability } = req.body;
+    
+    if (!pool) {
+        return res.status(503).json({ success: false, message: "Database not ready" });
+    }
+    
+    if (!fullName || !surname || !email || !password || !serviceType) {
+        return res.status(400).json({ success: false, message: "All required fields must be filled" });
+    }
+    
+    try {
+        const checkUser = await pool.request()
+            .input('email', sql.NVarChar, email)
+            .query("SELECT * FROM ServiceProviders WHERE Email = @email");
+        
+        if (checkUser.recordset.length > 0) {
+            return res.status(400).json({ success: false, message: "Provider already exists with this email" });
+        }
+        
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        await pool.request()
+            .input('fullName', sql.NVarChar, fullName)
+            .input('surname', sql.NVarChar, surname)
+            .input('email', sql.NVarChar, email)
+            .input('studentNumber', sql.NVarChar, studentNumber || null)
+            .input('password', sql.NVarChar, hashedPassword)
+            .input('serviceType', sql.NVarChar, serviceType)
+            .input('bio', sql.NVarChar, bio || null)
+            .input('hourlyRate', sql.Decimal, hourlyRate || null)
+            .input('campus', sql.NVarChar, campus || null)
+            .input('availability', sql.NVarChar, availability || null)
+            .query(`INSERT INTO ServiceProviders (FullName, Surname, Email, StudentNumber, PasswordHash, ServiceType, Bio, HourlyRate, Campus, Availability, Rating) 
+                    VALUES (@fullName, @surname, @email, @studentNumber, @password, @serviceType, @bio, @hourlyRate, @campus, @availability, 0)`);
+        
+        res.json({ success: true, message: "Service provider signup successful!" });
+    } catch (err) {
+        console.error("Error:", err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Test: GET http://localhost:${PORT}/test`);
