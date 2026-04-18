@@ -165,3 +165,26 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
         responseMsg.innerText = "Error signing up. Make sure server is running on port 3000";
     }
 });
+function toggleChat() {
+  const chat = document.getElementById("chatbot");
+  chat.style.display = chat.style.display === "block" ? "none" : "block";
+}
+
+function handleKey(e) {
+  if (e.key === "Enter") {
+    let input = document.getElementById("chat-input");
+    let message = input.value;
+
+    let chatBody = document.getElementById("chat-body");
+    chatBody.innerHTML += "<p><b>You:</b> " + message + "</p>";
+
+    // Simple response logic
+    if (message.toLowerCase().includes("how")) {
+      chatBody.innerHTML += "<p><b>Bot:</b> We connect students to services easily.</p>";
+    } else {
+      chatBody.innerHTML += "<p><b>Bot:</b> I’m still learning 😅</p>";
+    }
+
+    input.value = "";
+  }
+}
