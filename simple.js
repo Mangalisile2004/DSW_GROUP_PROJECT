@@ -1,1 +1,0 @@
-const express = require("express"); const app = express(); app.get("/test", (req, res) => { res.json({ message: "Hello from port 3000!" }); }); app.listen(3000, "0.0.0.0", () => { console.log("Server running on http://localhost:3000"); });
