@@ -119,9 +119,15 @@
         <div class="recommended">
             <h3><i class="fas fa-thumbs-up"></i> Recommended for You</h3>
             <ul id="recommended-list">
-                <li><i class="fas fa-user-graduate"></i> John – Math Tutor</li>
-                <li><i class="fas fa-pen-fancy"></i> Lerato – Writing Coach</li>
-                <li><i class="fas fa-dumbbell"></i> Sam – Fitness Trainer</li>
+                <li><i class="fas fa-user-graduate"></i> John – Math Tutor
+                <button onclick="viewProfile('john')">View Profile</button></li>
+           
+                <li><i class="fas fa-pen-fancy"></i> Lerato – Writing Coach
+                <button onclick="viewProfile('lerato')">View Profile</button></li>
+
+                <li><i class="fas fa-dumbbell"></i> Sam – Fitness Trainer
+                <button onclick="viewProfile('john')">View Profile</button></li>
+
             </ul>
             <a href="#" onclick="viewAllRecommended()">See All <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -165,8 +171,19 @@
         <span class="close" onclick="closeProvidersModal()">&times;</span>
         <h2>All Service Providers</h2>
         <div id="modalProvidersList"></div>
-    </div>
+    </div>    
 </div>
+    
+<div id="profile-modal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn" onclick="closeProfile()">&times;</span>
+    <h2 id="provider-name"></h2>
+    <p><strong>Service:</strong> <span id="provider-service"></span></p>
+    <p><strong>Rating:</strong> <span id="provider-rating"></span></p>
+    <p><strong>Experience:</strong> <span id="provider-experience"></span></p>
+    <p><strong>About:</strong> <span id="provider-about"></span></p>
+  </div>
+</div> 
 
 <script src="dashboard.js"></script>
 </body>
