@@ -344,3 +344,43 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 });
+
+const providers = {
+  john: {
+    name: "John",
+    service: "Math Tutor",
+    rating: "⭐ 4.8 / 5",
+    experience: "3 years tutoring university math",
+    about: "Specializes in calculus and algebra. Helps students prepare for exams and assignments."
+  },
+  lerato: {
+    name: "Lerato",
+    service: "Writing Coach",
+    rating: "⭐ 4.9 / 5",
+    experience: "4 years academic writing support",
+    about: "Assists with essays, research papers, and proofreading."
+  },
+  sam: {
+    name: "Sam",
+    service: "Fitness Trainer",
+    rating: "⭐ 4.7 / 5",
+    experience: "Certified trainer with 5 years experience",
+    about: "Offers personalized workout plans and fitness coaching."
+  }
+};
+
+function viewProfile(providerKey) {
+  const provider = providers[providerKey];
+
+  document.getElementById("provider-name").textContent = provider.name;
+  document.getElementById("provider-service").textContent = provider.service;
+  document.getElementById("provider-rating").textContent = provider.rating;
+  document.getElementById("provider-experience").textContent = provider.experience;
+  document.getElementById("provider-about").textContent = provider.about;
+
+  document.getElementById("profile-modal").style.display = "block";
+}
+
+function closeProfile() {
+  document.getElementById("profile-modal").style.display = "none";
+}
