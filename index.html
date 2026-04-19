@@ -1,6 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Connect</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="login.css">
+  <script src="main.js"></script>
+  <script src="login.js"></script>
+
+</head>
+ <body>
+  <div id="modal-container"></div>
+
+
+
+
+  <header>
+    <div class="logo">
+      <h1><i>Campus Connect</i></h1>
+    </div>
+    <button class="menu-toggle" onclick="toggleMenu()">☰</button>
+
+    <nav class="nav-links">
+      <a href="#" class="active">Home</a>
+      <a href="#" onclick="showAlert('About')">About</a>
+      <a href="#" onclick="showAlert('How It Works')">How It Works</a>
+      <a href="#" onclick="showAlert('Contact')">Contact</a>
+    </nav>
+
+    <div class="auth-buttons">
+      <button class="btn-login" id="loginBtn">Login</button>
+      <button class="btn-signup" onclick="showAlert('Sign Up')">Sign Up</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>
+      Turn Your <span style="color: orange;">Talent</span> Into
+      <span style="color: orange;">Income</span>!
+    </h1>
+    <p>Discover And Promote Student Skills On Campus</p>
+
+    <button class="btn-teal" onclick="window.location.href='findServices.html'">Find Services</button>
+    <button class="btn-orange" onclick="window.location.href='startHustle.html'">Start Your Hustle</button>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Connect</title>
@@ -109,6 +157,7 @@
         </div>
     </section>
 
+
     <!-- Sign Up Modal for Service Seeker -->
     <div id="signupModal" class="modal">
         <div class="modal-content">
@@ -121,8 +170,12 @@
                 <label for="surname">Surname</label>
                 <input type="text" id="surname" name="surname" placeholder="Enter your surname" required>
 
+
+  </section>
+
                 <label for="email">Email Address</label>
                 <input type="email" id="email" name="email" placeholder="Enter your email" required>
+
 
                 <label for="studentNumber">Student Number</label>
                 <input type="number" id="studentNumber" name="studentNumber" placeholder="Enter your student number">
@@ -141,6 +194,43 @@
             <p id="responseMessage"></p>
         </div>
     </div>
+
+
+  <section class="footer-banner">
+    <h2>Join Campus Connect Today!</h2>
+    <p>Sign Up & Start Earning</p>
+    
+
+    <hr class="footer-divider">
+
+   <div class="footer-contact">
+  <h3>📞 Get in Touch</h3>
+  <p><strong>Location:</strong> Bunting Road Campus</p>
+  <p><strong>Phone:</strong> 074 883 29263</p>
+  <p><strong>Email:</strong> CampusConnect@uni.ac.za</p>
+
+
+</div>
+
+    </div>
+  </section>
+   <script src="main.js"></script>
+  <script src="login.js"></script>
+  <script>
+    // Load external modal HTML after page is ready
+    document.addEventListener("DOMContentLoaded", function() {
+      fetch("loginModals.html")
+        .then(response => response.text())
+        .then(data => {
+          document.getElementById("modal-container").innerHTML = data;
+        });
+    });
+  </script>
+
+  <script src="main.js"></script>
+</body>
+
+</html>
 
     <!-- Sign Up Modal for Service Provider (Start Your Hustle) -->
     <div id="providerModal" class="modal">
@@ -200,3 +290,4 @@
     <script src="main.js"></script>
 </body>
 </html>
+

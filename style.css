@@ -285,6 +285,47 @@ header h1 {
 .tiktok   { background-image: url('https://locusmag.com/wp-content/uploads/2023/07/tiktok.jpg'); }
 .linkedin { background-image: url('https://disinfocode.eu/images/microsoft-linkedin1742289593.png'); }
 
+
+.footer-contact {
+  text-align: center;
+  margin-top: 20px;
+  padding: 20px;
+  background: #f9f9f9;
+  border-radius: 12px;
+  font-family: 'Poppins', sans-serif;
+  color: #333;
+}
+
+.footer-contact h3 {
+  margin-bottom: 10px;
+  color: teal;
+  font-weight: 600;
+}
+
+.footer-contact p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+.footer-contact strong {
+  color: orange;
+}
+
+.social-icons {
+  margin-top: 15px;
+}
+
+.social-icons a {
+  margin: 0 12px;
+  text-decoration: none;
+  font-weight: 600;
+  color: teal;
+  transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+  color: orange;
+
 .signup-section {
   background-color: #ffffff;
   padding: 30px 20px;
@@ -449,4 +490,5 @@ header h1 {
     height: 150px;
     overflow-y: auto;
     padding: 10px;
+
 }
