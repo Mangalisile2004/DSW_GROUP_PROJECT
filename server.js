@@ -7,10 +7,10 @@ const path = require("path");
 const app = express();
 app.use(bodyParser.json());
 
-// Serve static files (HTML, CSS, JS)
+// ===== SERVE STATIC FRONTEND FILES (HTML, CSS, JS) =====
 app.use(express.static(__dirname));
 
-// CORS middleware
+// ===== CORS MIDDLEWARE =====
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
     next();
 });
 
-// PostgreSQL connection using Render database
+// ===== POSTGRESQL DATABASE CONNECTION =====
 const pool = new Pool({
     connectionString: process.env.DATABASE_URL || "postgresql://campusadmin:Z0fF9lAOagrJn8xHXs2NZ5YYptSFmDe4@dpg-d7ieh0m7r5hc73c8kcc0-a:5432/campusconnectdb_pcwk",
     ssl: {
@@ -29,7 +29,6 @@ const pool = new Pool({
     }
 });
 
-// Test database connection
 pool.connect((err, client, release) => {
     if (err) {
         console.error("❌ Database connection error:", err.message);
@@ -55,7 +54,6 @@ app.get("/health", (req, res) => {
 // ===== CREATE TABLES IF NOT EXISTS =====
 async function createTables() {
     try {
-        // Create ServiceSeekers table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS serviceseekers (
                 id SERIAL PRIMARY KEY,
@@ -69,7 +67,6 @@ async function createTables() {
         `);
         console.log("✅ ServiceSeekers table ready");
 
-        // Create ServiceProviders table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS serviceproviders (
                 id SERIAL PRIMARY KEY,
@@ -88,7 +85,6 @@ async function createTables() {
         `);
         console.log("✅ ServiceProviders table ready");
 
-        // Create Bookings table
         await pool.query(`
             CREATE TABLE IF NOT EXISTS bookings (
                 id SERIAL PRIMARY KEY,
@@ -105,7 +101,6 @@ async function createTables() {
     }
 }
 
-// Call create tables
 createTables();
 
 // ===== SIGNUP ENDPOINT (Service Seeker) =====
@@ -117,7 +112,6 @@ app.post("/signup", async (req, res) => {
     }
     
     try {
-        // Check if user exists
         const checkUser = await pool.query(
             "SELECT * FROM serviceseekers WHERE email = $1",
             [email]
@@ -202,7 +196,7 @@ app.get("/user/:email", async (req, res) => {
     }
 });
 
-// ===== GET ALL PROVIDERS =====
+// ===== FIXED GET ALL PROVIDERS ENDPOINT =====
 app.get("/providers", async (req, res) => {
     try {
         const result = await pool.query(
@@ -301,12 +295,30 @@ app.get("/users", async (req, res) => {
     }
 });
 
+// ===== GET PROVIDER SERVICES =====
+app.get("/provider-services/:email", async (req, res) => {
+    const { email } = req.params;
+    
+    try {
+        const result = await pool.query(
+            "SELECT id, servicetype, bio, hourlyrate, campus, availability, rating FROM serviceproviders WHERE email = $1",
+            [email]
+        );
+        
+        res.json({ success: true, services: result.rows });
+    } catch (err) {
+        console.error("Error fetching provider services:", err);
+        res.status(500).json({ success: false, message: "Failed to fetch services" });
+    }
+});
+
 // ===== START SERVER =====
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3001;
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`✅ Server running on port ${PORT}`);
     console.log(`📝 Test: GET /test`);
     console.log(`📝 Signup: POST /signup`);
     console.log(`📝 Login: POST /login`);
     console.log(`📝 Providers: GET /providers`);
+    console.log(`📝 Provider Services: GET /provider-services/:email`);
 });
