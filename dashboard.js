@@ -134,17 +134,141 @@ function viewProvider(providerId) {
     alert(`Viewing provider ${providerId} - Full profile coming soon`);
 }
 
-// ===== FILTER BY CATEGORY =====
-function filterByCategory(category) {
-    alert(`Showing ${category} services`);
+// ===== SEARCH SERVICES =====
+async function searchServices() {
+    const searchInput = document.getElementById('searchInput');
+    const query = searchInput.value.trim().toLowerCase();
+    
+    if (!query) {
+        // If search is empty, reload all providers
+        await loadProviders();
+        return;
+    }
+    
+    try {
+        const response = await fetch('http://localhost:3000/providers');
+        const data = await response.json();
+        
+        if (data.success && data.providers) {
+            // Filter providers based on search query
+            const filteredProviders = data.providers.filter(provider => {
+                return (
+                    (provider.FullName && provider.FullName.toLowerCase().includes(query)) ||
+                    (provider.Surname && provider.Surname.toLowerCase().includes(query)) ||
+                    (provider.ServiceType && provider.ServiceType.toLowerCase().includes(query)) ||
+                    (provider.Bio && provider.Bio.toLowerCase().includes(query)) ||
+                    (provider.Campus && provider.Campus.toLowerCase().includes(query))
+                );
+            });
+            
+            displayProviders(filteredProviders);
+            
+            // Show custom message if no results found
+            const container = document.getElementById('providers-list');
+            if (filteredProviders.length === 0) {
+                container.innerHTML = `
+                    <div class="no-results-message">
+                        <i class="fas fa-frown" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h3>Sorry, we don't offer "${query}" yet</h3>
+                        <p>We're constantly adding new services! Here are some suggestions:</p>
+                        <ul style="list-style: none; margin-top: 15px;">
+                            <li>🔍 Try a different keyword</li>
+                            <li>📚 Check out our popular categories above</li>
+                            <li>💡 Be the first to request this service</li>
+                        </ul>
+                        <button onclick="resetToAllProviders()" class="btn-reset" style="margin-top: 20px; padding: 10px 20px; background: #2eb997; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            Browse All Services
+                        </button>
+                    </div>
+                `;
+            }
+        }
+    } catch (error) {
+        console.error('Error searching providers:', error);
+        const container = document.getElementById('providers-list');
+        if (container) {
+            container.innerHTML = '<div class="error">Error searching. Please try again.</div>';
+        }
+    }
 }
 
-// ===== SEARCH SERVICES =====
-function searchServices() {
+// ===== FILTER BY CATEGORY (Updated with better messages) =====
+async function filterByCategory(category) {
+    try {
+        const response = await fetch('http://localhost:3000/providers');
+        const data = await response.json();
+        
+        if (data.success && data.providers) {
+            const filteredProviders = data.providers.filter(provider => 
+                provider.ServiceType && provider.ServiceType.toLowerCase() === category.toLowerCase()
+            );
+            
+            displayProviders(filteredProviders);
+            
+            const container = document.getElementById('providers-list');
+            if (filteredProviders.length === 0) {
+                // Capitalize category name
+                const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
+                container.innerHTML = `
+                    <div class="no-results-message">
+                        <i class="fas fa-tools" style="font-size: 48px; margin-bottom: 15px;"></i>
+                        <h3>No ${categoryName} providers available yet</h3>
+                        <p>We're growing our community! Check back soon or explore other categories:</p>
+                        <div style="margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                            <button onclick="filterByCategory('tutoring')" class="suggestion-btn">📚 Tutoring</button>
+                            <button onclick="filterByCategory('photography')" class="suggestion-btn">📸 Photography</button>
+                            <button onclick="filterByCategory('design')" class="suggestion-btn">🎨 Graphic Design</button>
+                            <button onclick="filterByCategory('beauty')" class="suggestion-btn">💇 Hair & Beauty</button>
+                        </div>
+                        <button onclick="resetToAllProviders()" class="btn-reset" style="margin-top: 20px; padding: 10px 20px; background: #2eb997; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                            View All Services
+                        </button>
+                    </div>
+                `;
+            } else {
+                document.querySelector('.providers-section')?.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    } catch (error) {
+        console.error('Error filtering providers:', error);
+    }
+}
+// ===== FILTER BY CATEGORY =====
+async function filterByCategory(category) {
+    try {
+        const response = await fetch('http://localhost:3000/providers');
+        const data = await response.json();
+        
+        if (data.success && data.providers) {
+            const filteredProviders = data.providers.filter(provider => 
+                provider.ServiceType && provider.ServiceType.toLowerCase() === category.toLowerCase()
+            );
+            
+            displayProviders(filteredProviders);
+            
+            const container = document.getElementById('providers-list');
+            if (filteredProviders.length === 0) {
+                container.innerHTML = `<div class="no-results">📂 No providers found in "${category}" category</div>`;
+            } else {
+                document.querySelector('.providers-section')?.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+    } catch (error) {
+        console.error('Error filtering providers:', error);
+    }
+}
+
+// ===== RESET TO ALL PROVIDERS =====
+async function resetToAllProviders() {
     const searchInput = document.getElementById('searchInput');
-    if (searchInput) {
-        const query = searchInput.value;
-        alert(`Searching for: ${query}`);
+    if (searchInput) searchInput.value = '';
+    await loadProviders();
+}
+
+// ===== HANDLE ENTER KEY =====
+function handleKeyPress(event) {
+    if (event.key === 'Enter') {
+        searchServices();
     }
 }
 

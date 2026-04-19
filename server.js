@@ -29,13 +29,55 @@ const config = {
 };
 
 let pool;
+let isConnecting = false;
 
-// Test endpoint
+// ===== DATABASE CONNECTION WITH AUTO-RECONNECT =====
+async function connectToDatabase() {
+    if (isConnecting) return;
+    isConnecting = true;
+    
+    try {
+        const poolConnection = await sql.connect(config);
+        pool = poolConnection;
+        console.log("✅ Connected to SQL Server");
+        
+        // Handle connection errors after successful connection
+        poolConnection.on('error', (err) => {
+            console.error('Database connection error:', err);
+            pool = null;
+            // Try to reconnect after 5 seconds
+            setTimeout(() => {
+                console.log('Attempting to reconnect to database...');
+                connectToDatabase();
+            }, 5000);
+        });
+        
+        isConnecting = false;
+    } catch (err) {
+        console.error("❌ DB connection error:", err.message);
+        isConnecting = false;
+        // Retry connection after 10 seconds
+        setTimeout(() => {
+            console.log('Retrying database connection...');
+            connectToDatabase();
+        }, 10000);
+    }
+}
+
+// ===== TEST ENDPOINTS =====
 app.get("/test", (req, res) => {
     res.json({ message: "Server is running!", dbConnected: pool !== null });
 });
 
-// Signup endpoint
+app.get("/health", (req, res) => {
+    res.json({ 
+        status: 'OK', 
+        dbConnected: pool !== null,
+        timestamp: new Date().toISOString()
+    });
+});
+
+// ===== SIGNUP ENDPOINT (Service Seeker) =====
 app.post("/signup", async (req, res) => {
     const { fullName, surname, email, password, servicesNeeded, studentNumber } = req.body;
     
@@ -74,7 +116,7 @@ app.post("/signup", async (req, res) => {
     }
 });
 
-// Login endpoint
+// ===== LOGIN ENDPOINT =====
 app.post("/login", async (req, res) => {
     const { email, password } = req.body;
     
@@ -116,7 +158,7 @@ app.post("/login", async (req, res) => {
     }
 });
 
-// Get user by email endpoint
+// ===== GET USER BY EMAIL =====
 app.get("/user/:email", async (req, res) => {
     const { email } = req.params;
     
@@ -140,7 +182,7 @@ app.get("/user/:email", async (req, res) => {
     }
 });
 
-// Get all providers
+// ===== GET ALL PROVIDERS =====
 app.get("/providers", async (req, res) => {
     if (!pool) {
         return res.status(503).json({ success: false, message: "Database not ready" });
@@ -148,7 +190,7 @@ app.get("/providers", async (req, res) => {
     
     try {
         const result = await pool.request()
-            .query("SELECT Id, FullName, Surname, Email, ServiceType, Bio, Rating FROM ServiceProviders");
+            .query("SELECT Id, FullName, Surname, Email, ServiceType, Bio, Rating, Campus, Availability, HourlyRate FROM ServiceProviders");
         res.json({ success: true, providers: result.recordset });
     } catch (err) {
         console.error("Error fetching providers:", err);
@@ -156,7 +198,7 @@ app.get("/providers", async (req, res) => {
     }
 });
 
-// Get all users
+// ===== GET ALL USERS =====
 app.get("/users", async (req, res) => {
     if (!pool) {
         return res.status(503).json({ success: false, message: "Database not ready" });
@@ -172,8 +214,6 @@ app.get("/users", async (req, res) => {
     }
 });
 
-const PORT = 3000;
-// ===== ADD SERVICE (for providers) =====
 // ===== PROVIDER SIGNUP =====
 app.post("/provider/signup", async (req, res) => {
     const { fullName, surname, email, studentNumber, password, serviceType, bio, hourlyRate, campus, availability } = req.body;
@@ -218,19 +258,54 @@ app.post("/provider/signup", async (req, res) => {
     }
 });
 
+// ===== ADD SERVICE (for existing providers) =====
+app.post("/add-service", async (req, res) => {
+    const { providerEmail, title, category, description, price, priceType, campus, availability } = req.body;
+    
+    if (!pool) {
+        return res.status(503).json({ success: false, message: "Database not ready" });
+    }
+    
+    try {
+        // Check if provider exists
+        const checkProvider = await pool.request()
+            .input('email', sql.NVarChar, providerEmail)
+            .query("SELECT * FROM ServiceProviders WHERE Email = @email");
+        
+        if (checkProvider.recordset.length === 0) {
+            return res.status(404).json({ success: false, message: "Provider not found" });
+        }
+        
+        // Update provider's service details
+        await pool.request()
+            .input('email', sql.NVarChar, providerEmail)
+            .input('serviceType', sql.NVarChar, category)
+            .input('bio', sql.NVarChar, description)
+            .input('hourlyRate', sql.Decimal, price)
+            .input('campus', sql.NVarChar, campus || null)
+            .input('availability', sql.NVarChar, availability || null)
+            .query(`UPDATE ServiceProviders 
+                    SET ServiceType = @serviceType, Bio = @bio, HourlyRate = @hourlyRate, 
+                        Campus = @campus, Availability = @availability
+                    WHERE Email = @email`);
+        
+        res.json({ success: true, message: "Service published successfully!" });
+    } catch (err) {
+        console.error("Error adding service:", err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// ===== START SERVER =====
+const PORT = 3000;
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`Server running on http://localhost:${PORT}`);
     console.log(`Test: GET http://localhost:${PORT}/test`);
     console.log(`Signup: POST http://localhost:${PORT}/signup`);
     console.log(`Login: POST http://localhost:${PORT}/login`);
+    console.log(`Providers: GET http://localhost:${PORT}/providers`);
     console.log(`Dashboard: http://localhost:${PORT}/dashboard.html`);
 });
 
-sql.connect(config)
-    .then(poolConnection => {
-        pool = poolConnection;
-        console.log("Connected to SQL Server");
-    })
-    .catch(err => {
-        console.error("DB error:", err.message);
-    });
+// ===== INITIATE DATABASE CONNECTION =====
+connectToDatabase();

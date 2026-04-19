@@ -712,3 +712,63 @@ body {
     font-size: 12px;
   }
 }
+
+/* No Results Message Styles */
+.no-results-message {
+    text-align: center;
+    padding: 60px 40px;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+}
+
+.no-results-message i {
+    color: #2eb997;
+}
+
+.no-results-message h3 {
+    font-size: 24px;
+    color: #1e293b;
+    margin-bottom: 10px;
+}
+
+.no-results-message p {
+    color: #64748b;
+    margin-bottom: 15px;
+}
+
+.no-results-message ul {
+    text-align: left;
+    display: inline-block;
+    margin: 0 auto;
+}
+
+.no-results-message li {
+    padding: 8px 0;
+    color: #475569;
+}
+
+.suggestion-btn {
+    padding: 8px 16px;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 14px;
+}
+
+.suggestion-btn:hover {
+    background: #2eb997;
+    color: white;
+    border-color: #2eb997;
+}
+
+.btn-reset {
+    transition: 0.3s;
+}
+
+.btn-reset:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(46, 185, 151, 0.3);
+}
