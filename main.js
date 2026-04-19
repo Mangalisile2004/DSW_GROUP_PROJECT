@@ -1,27 +1,20 @@
-//function openSignup() {
-  //document.getElementById("signupModal").style.display = "flex";
-//
-
-//function closeSignup() {
-  //document.getElementById("signupModal").style.display = "none";}//
+// ===== API CONFIGURATION =====
+const API_URL = 'https://campus-connect-api-g1z.onrender.com';
 
 function openModal() {
     document.getElementById("signupModal").style.display = "block";
 }
 
-// Close Seeker Modal
 function closeModal() {
     document.getElementById("signupModal").style.display = "none";
     document.getElementById("popupSignupForm").reset();
     document.getElementById("responseMessage").innerText = "";
 }
 
-// Open Provider Modal (Start Your Hustle)
 function openProviderModal() {
     document.getElementById("providerModal").style.display = "block";
 }
 
-// Close Provider Modal
 function closeProviderModal() {
     document.getElementById("providerModal").style.display = "none";
     document.getElementById("popupProviderForm").reset();
@@ -52,7 +45,7 @@ document.getElementById("popupSignupForm").addEventListener("submit", async func
     responseMsg.style.color = "blue";
     
     try {
-        const response = await fetch("http://localhost:3000/signup", {
+        const response = await fetch(`${API_URL}/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
@@ -81,7 +74,7 @@ document.getElementById("popupSignupForm").addEventListener("submit", async func
     } catch (error) {
         console.error("Error:", error);
         responseMsg.style.color = "red";
-        responseMsg.innerText = "Error signing up. Make sure server is running on port 3000";
+        responseMsg.innerText = "Error signing up. Please try again later.";
     }
 });
 
@@ -103,7 +96,6 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
     
     const responseMsg = document.getElementById("providerResponseMessage");
     
-    // Check if passwords match
     if (password !== confirmPassword) {
         responseMsg.style.color = "red";
         responseMsg.innerText = "Passwords do not match!";
@@ -114,7 +106,7 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
     responseMsg.style.color = "blue";
     
     try {
-        const response = await fetch("http://localhost:3000/provider/signup", {
+        const response = await fetch(`${API_URL}/provider/signup`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ 
@@ -138,7 +130,6 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
             responseMsg.innerText = "Success! You are now a service provider!";
             setTimeout(() => {
                 closeProviderModal();
-                // Redirect to provider dashboard
                 window.location.href = `providerDashboard.html?email=${encodeURIComponent(email)}`;
             }, 1500);
         } else {
@@ -148,12 +139,11 @@ document.getElementById("popupProviderForm").addEventListener("submit", async fu
     } catch (error) {
         console.error("Error:", error);
         responseMsg.style.color = "red";
-        responseMsg.innerText = "Error signing up. Make sure server is running on port 3000";
+        responseMsg.innerText = "Error signing up. Please try again later.";
     }
 });
 
 // ===== UI FUNCTIONS =====
-
 function toggleMenu() {
     const navLinks = document.querySelector('.nav-links');
     const authButtons = document.querySelector('.auth-buttons');
@@ -165,7 +155,6 @@ function showAlert(message) {
     alert(message + " feature coming soon!");
 }
 
-// Close modals when clicking outside
 window.onclick = function(event) {
     const seekerModal = document.getElementById("signupModal");
     const providerModal = document.getElementById("providerModal");
@@ -178,7 +167,6 @@ window.onclick = function(event) {
 }
 
 // ===== CHATBOT FUNCTIONS =====
-
 let isChatOpen = false;
 
 function toggleChat() {
@@ -266,7 +254,6 @@ function handleChatKeyPress(event) {
     }
 }
 
-// Escape HTML to prevent XSS
 function escapeHtml(str) {
     if (!str) return '';
     return str
@@ -277,7 +264,6 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
-// Close chat when clicking outside
 document.addEventListener('click', function(event) {
     const chatbot = document.getElementById('chatbot');
     if (!chatbot) return;

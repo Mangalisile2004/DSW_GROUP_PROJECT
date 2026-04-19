@@ -1,7 +1,7 @@
 // ===== API CONFIGURATION =====
-const API_URL = 'https://campus-connect-api-g1jz.onrender.com'; 
+const API_URL = 'https://campus-connect-api-g1jz.onrender.com';
 
-//===== Global Variables =====
+// ===== Global Variables =====
 let allServices = [];
 let currentFilters = {
     search: '',
@@ -10,74 +10,16 @@ let currentFilters = {
     category: 'all'
 };
 
-// ===== Check if user is logged in =====
-function isUserLoggedIn() {
-    const userEmail = localStorage.getItem('userEmail');
-    const providerEmail = localStorage.getItem('providerEmail');
-    return userEmail !== null || providerEmail !== null;
-}
-
-// ===== Get current user email =====
-function getCurrentUserEmail() {
-    return localStorage.getItem('userEmail') || localStorage.getItem('providerEmail');
-}
-
-// ===== Test backend connection first =====
-async function testBackendConnection() {
-    try {
-        console.log('Testing connection to:', `${API_URL}/test`);
-        const response = await fetch(`${API_URL}/test`);
-        if (response.ok) {
-            const data = await response.json();
-            console.log('✅ Backend connected:', data);
-            return true;
-        }
-    } catch (error) {
-        console.error('❌ Backend connection failed:', error);
-        return false;
-    }
-    return false;
-}
-
-// ===== Show connection error message =====
-function showConnectionError() {
-    const grid = document.getElementById('servicesGrid');
-    grid.innerHTML = `
-        <div class="no-results">
-            <i class="fas fa-server" style="font-size: 64px; color: #ef4444;"></i>
-            <h3>Cannot Connect to Server</h3>
-            <p>Unable to reach the backend server. Please make sure:</p>
-            <ul style="text-align: left; display: inline-block; margin-top: 15px; color: #64748b;">
-                <li>✓ The backend server is running on Render</li>
-                <li>✓ Your internet connection is active</li>
-                <li>✓ The API URL is correct: ${API_URL}</li>
-            </ul>
-            <button onclick="location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #2eb997; color: white; border: none; border-radius: 8px; cursor: pointer;">
-                <i class="fas fa-sync-alt"></i> Retry Connection
-            </button>
-        </div>
-    `;
-}
-
 // ===== Load Services on Page Load =====
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Find Services page loaded');
-    
-    // Test connection first
-    const isConnected = await testBackendConnection();
-    if (!isConnected) {
-        showConnectionError();
-        return;
-    }
-    
-    loadServices();
+    await loadServices();
     setupEventListeners();
     setupCategoryFilters();
 });
 
 // ===== Setup Event Listeners =====
 function setupEventListeners() {
-    // Search on Enter key
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
         searchInput.addEventListener('keypress', (e) => {
@@ -85,7 +27,6 @@ function setupEventListeners() {
         });
     }
     
-    // Filter on change
     const campusFilter = document.getElementById('campusFilter');
     const priceFilter = document.getElementById('priceFilter');
     if (campusFilter) campusFilter.addEventListener('change', () => searchServices());
@@ -139,10 +80,10 @@ function filterAndDisplayServices() {
     if (currentFilters.search) {
         const searchTerm = currentFilters.search.toLowerCase();
         filtered = filtered.filter(service => 
-            service.fullname?.toLowerCase().includes(searchTerm) ||
-            service.surname?.toLowerCase().includes(searchTerm) ||
-            service.servicetype?.toLowerCase().includes(searchTerm) ||
-            service.bio?.toLowerCase().includes(searchTerm)
+            (service.fullname?.toLowerCase().includes(searchTerm)) ||
+            (service.surname?.toLowerCase().includes(searchTerm)) ||
+            (service.servicetype?.toLowerCase().includes(searchTerm)) ||
+            (service.bio?.toLowerCase().includes(searchTerm))
         );
     }
     
@@ -156,7 +97,7 @@ function filterAndDisplayServices() {
     // Filter by price range
     if (currentFilters.priceRange) {
         filtered = filtered.filter(service => {
-            const price = service.hourlyrate || 0;
+            const price = parseFloat(service.hourlyrate) || 0;
             switch(currentFilters.priceRange) {
                 case '0-100': return price <= 100;
                 case '100-300': return price > 100 && price <= 300;
@@ -188,14 +129,14 @@ function sortServicesList(services) {
     
     switch(sortBy) {
         case 'price-low':
-            return [...services].sort((a, b) => (a.hourlyrate || 0) - (b.hourlyrate || 0));
+            return [...services].sort((a, b) => parseFloat(a.hourlyrate || 0) - parseFloat(b.hourlyrate || 0));
         case 'price-high':
-            return [...services].sort((a, b) => (b.hourlyrate || 0) - (a.hourlyrate || 0));
+            return [...services].sort((a, b) => parseFloat(b.hourlyrate || 0) - parseFloat(a.hourlyrate || 0));
         case 'name':
             return [...services].sort((a, b) => (a.fullname || '').localeCompare(b.fullname || ''));
         case 'rating':
         default:
-            return [...services].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            return [...services].sort((a, b) => parseFloat(b.rating || 0) - parseFloat(a.rating || 0));
     }
 }
 
@@ -232,11 +173,11 @@ function displayServices(services) {
                 <p class="service-bio">${escapeHtml(service.bio || 'No description provided')}</p>
                 <div class="service-details">
                     <div class="service-price">
-                        R${service.hourlyrate || '0'} <small>/hour</small>
+                        R${parseFloat(service.hourlyrate).toFixed(0) || '0'} <small>/hour</small>
                     </div>
                     <div class="service-rating">
                         <i class="fas fa-star"></i>
-                        <span>${service.rating || 'New'}</span>
+                        <span>${parseFloat(service.rating).toFixed(1) || 'New'}</span>
                     </div>
                 </div>
                 <div class="service-location">
@@ -285,19 +226,13 @@ function showServiceDetail(service) {
                 <div style="background: #f8fafc; padding: 12px; border-radius: 12px; text-align: center;">
                     <i class="fas fa-money-bill-wave" style="color: #2eb997; font-size: 20px;"></i>
                     <p style="font-size: 12px; color: #64748b; margin-top: 5px;">Hourly Rate</p>
-                    <p style="font-weight: 600;">R${service.hourlyrate || '0'}/hour</p>
+                    <p style="font-weight: 600;">R${parseFloat(service.hourlyrate).toFixed(0) || '0'}/hour</p>
                 </div>
                 <div style="background: #f8fafc; padding: 12px; border-radius: 12px; text-align: center;">
                     <i class="fas fa-star" style="color: #f59e0b; font-size: 20px;"></i>
                     <p style="font-size: 12px; color: #64748b; margin-top: 5px;">Rating</p>
-                    <p style="font-weight: 600;">${service.rating || 'New'} / 5</p>
+                    <p style="font-weight: 600;">${parseFloat(service.rating).toFixed(1) || 'New'} / 5</p>
                 </div>
-            </div>
-            
-            <div style="background: #fef3c7; padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                <p style="color: #d97706; font-size: 14px;">
-                    <i class="fas fa-envelope"></i> Contact: ${escapeHtml(service.email || 'Email available after booking')}
-                </p>
             </div>
             
             <button onclick="requestBooking(${service.id})" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #2eb997, #084d43); color: white; border: none; border-radius: 12px; cursor: pointer; font-weight: 600; margin-bottom: 10px;">
@@ -319,13 +254,21 @@ function closeServiceModal() {
 
 // ===== Request Booking =====
 function requestBooking(providerId) {
-    if (!isUserLoggedIn()) {
-        alert('Please log in to request a booking');
+    const userEmail = localStorage.getItem('userEmail');
+    const providerEmail = localStorage.getItem('providerEmail');
+    
+    if (!userEmail && !providerEmail) {
+        alert('Please login to request a booking');
         window.location.href = 'index.html';
         return;
     }
     
-    alert(`✅ Booking request sent! The provider will contact you soon.`);
+    if (providerEmail && !userEmail) {
+        alert('You are logged in as a Service Provider. Please sign up as a Service Seeker to book services.');
+        return;
+    }
+    
+    alert(`✅ Booking request sent! The provider will contact you at ${userEmail} soon.`);
     closeServiceModal();
 }
 

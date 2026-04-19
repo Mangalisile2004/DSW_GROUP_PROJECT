@@ -1,3 +1,6 @@
+// ===== API CONFIGURATION =====
+const API_URL = 'https://campus-connect-api-g1z.onrender.com';
+
 // ===== SIDEBAR FUNCTIONS =====
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
@@ -30,7 +33,7 @@ function logout() {
 // ===== LOAD USER DATA =====
 async function loadUserData(email) {
     try {
-        const response = await fetch(`http://localhost:3000/user/${encodeURIComponent(email)}`);
+        const response = await fetch(`${API_URL}/user/${encodeURIComponent(email)}`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -47,13 +50,13 @@ async function loadUserData(email) {
             const serviceNeededElem = document.getElementById('service-needed');
             const profileImageElem = document.getElementById('profileImage');
             
-            if (fullNameElem) fullNameElem.innerText = `${user.FullName} ${user.Surname}`;
-            if (studentIdElem) studentIdElem.innerText = user.StudentNumber || 'Not provided';
-            if (userEmailElem) userEmailElem.innerText = user.Email;
-            if (serviceNeededElem) serviceNeededElem.innerText = user.ServiceNeeded || 'Not specified';
+            if (fullNameElem) fullNameElem.innerText = `${user.fullname} ${user.surname}`;
+            if (studentIdElem) studentIdElem.innerText = user.studentnumber || 'Not provided';
+            if (userEmailElem) userEmailElem.innerText = user.email;
+            if (serviceNeededElem) serviceNeededElem.innerText = user.serviceneeded || 'Not specified';
 
             if (profileImageElem) {
-                const initials = `${user.FullName.charAt(0)}${user.Surname.charAt(0)}`;
+                const initials = `${user.fullname.charAt(0)}${user.surname.charAt(0)}`;
                 profileImageElem.src = `https://ui-avatars.com/api/?background=2563eb&color=fff&size=120&name=${initials}`;
             }
         } else {
@@ -69,7 +72,7 @@ async function loadUserData(email) {
 // ===== LOAD PROVIDERS =====
 async function loadProviders() {
     try {
-        const response = await fetch('http://localhost:3000/providers');
+        const response = await fetch(`${API_URL}/providers`);
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -87,7 +90,7 @@ async function loadProviders() {
     } catch (error) {
         console.error('Error loading providers:', error);
         const container = document.getElementById('providers-list');
-        if (container) container.innerHTML = '<div class="error">Error connecting to server. Make sure backend is running on port 3000</div>';
+        if (container) container.innerHTML = '<div class="error">Error connecting to server. Please try again later.</div>';
     }
 }
 
@@ -102,16 +105,16 @@ function displayProviders(providers) {
     }
 
     container.innerHTML = providers.map(provider => `
-        <div class="provider-card" onclick="viewProvider(${provider.Id})">
+        <div class="provider-card" onclick="viewProvider(${provider.id})">
             <div class="provider-icon">
                 <i class="fas fa-user-circle"></i>
             </div>
-            <h4>${escapeHtml(provider.FullName)} ${escapeHtml(provider.Surname)}</h4>
-            <p><i class="fas fa-tag"></i> ${escapeHtml(provider.ServiceType)}</p>
+            <h4>${escapeHtml(provider.fullname)} ${escapeHtml(provider.surname)}</h4>
+            <p><i class="fas fa-tag"></i> ${escapeHtml(provider.servicetype)}</p>
             <div class="rating">
-                <i class="fas fa-star"></i> ${provider.Rating || 'New'}
+                <i class="fas fa-star"></i> ${provider.rating || 'New'}
             </div>
-            <button class="btn-view" onclick="event.stopPropagation(); viewProvider(${provider.Id})">
+            <button class="btn-view" onclick="event.stopPropagation(); viewProvider(${provider.id})">
                 View Profile
             </button>
         </div>
@@ -140,30 +143,27 @@ async function searchServices() {
     const query = searchInput.value.trim().toLowerCase();
     
     if (!query) {
-        // If search is empty, reload all providers
         await loadProviders();
         return;
     }
     
     try {
-        const response = await fetch('http://localhost:3000/providers');
+        const response = await fetch(`${API_URL}/providers`);
         const data = await response.json();
         
         if (data.success && data.providers) {
-            // Filter providers based on search query
             const filteredProviders = data.providers.filter(provider => {
                 return (
-                    (provider.FullName && provider.FullName.toLowerCase().includes(query)) ||
-                    (provider.Surname && provider.Surname.toLowerCase().includes(query)) ||
-                    (provider.ServiceType && provider.ServiceType.toLowerCase().includes(query)) ||
-                    (provider.Bio && provider.Bio.toLowerCase().includes(query)) ||
-                    (provider.Campus && provider.Campus.toLowerCase().includes(query))
+                    (provider.fullname && provider.fullname.toLowerCase().includes(query)) ||
+                    (provider.surname && provider.surname.toLowerCase().includes(query)) ||
+                    (provider.servicetype && provider.servicetype.toLowerCase().includes(query)) ||
+                    (provider.bio && provider.bio.toLowerCase().includes(query)) ||
+                    (provider.campus && provider.campus.toLowerCase().includes(query))
                 );
             });
             
             displayProviders(filteredProviders);
             
-            // Show custom message if no results found
             const container = document.getElementById('providers-list');
             if (filteredProviders.length === 0) {
                 container.innerHTML = `
@@ -192,22 +192,21 @@ async function searchServices() {
     }
 }
 
-// ===== FILTER BY CATEGORY (Updated with better messages) =====
+// ===== FILTER BY CATEGORY =====
 async function filterByCategory(category) {
     try {
-        const response = await fetch('http://localhost:3000/providers');
+        const response = await fetch(`${API_URL}/providers`);
         const data = await response.json();
         
         if (data.success && data.providers) {
             const filteredProviders = data.providers.filter(provider => 
-                provider.ServiceType && provider.ServiceType.toLowerCase() === category.toLowerCase()
+                provider.servicetype && provider.servicetype.toLowerCase() === category.toLowerCase()
             );
             
             displayProviders(filteredProviders);
             
             const container = document.getElementById('providers-list');
             if (filteredProviders.length === 0) {
-                // Capitalize category name
                 const categoryName = category.charAt(0).toUpperCase() + category.slice(1);
                 container.innerHTML = `
                     <div class="no-results-message">
@@ -225,30 +224,6 @@ async function filterByCategory(category) {
                         </button>
                     </div>
                 `;
-            } else {
-                document.querySelector('.providers-section')?.scrollIntoView({ behavior: 'smooth' });
-            }
-        }
-    } catch (error) {
-        console.error('Error filtering providers:', error);
-    }
-}
-// ===== FILTER BY CATEGORY =====
-async function filterByCategory(category) {
-    try {
-        const response = await fetch('http://localhost:3000/providers');
-        const data = await response.json();
-        
-        if (data.success && data.providers) {
-            const filteredProviders = data.providers.filter(provider => 
-                provider.ServiceType && provider.ServiceType.toLowerCase() === category.toLowerCase()
-            );
-            
-            displayProviders(filteredProviders);
-            
-            const container = document.getElementById('providers-list');
-            if (filteredProviders.length === 0) {
-                container.innerHTML = `<div class="no-results">📂 No providers found in "${category}" category</div>`;
             } else {
                 document.querySelector('.providers-section')?.scrollIntoView({ behavior: 'smooth' });
             }
@@ -283,15 +258,15 @@ function browseAllProviders() {
 
 async function loadAllProvidersForModal() {
     try {
-        const response = await fetch('http://localhost:3000/providers');
+        const response = await fetch(`${API_URL}/providers`);
         const data = await response.json();
         
         const container = document.getElementById('modalProvidersList');
         if (container && data.success && data.providers) {
             container.innerHTML = data.providers.map(provider => `
-                <div class="provider-modal-card" onclick="viewProvider(${provider.Id})">
-                    <strong>${escapeHtml(provider.FullName)} ${escapeHtml(provider.Surname)}</strong>
-                    <br><small>⭐ ${provider.Rating || 'New'} | ${escapeHtml(provider.ServiceType)}</small>
+                <div class="provider-modal-card" onclick="viewProvider(${provider.id})">
+                    <strong>${escapeHtml(provider.fullname)} ${escapeHtml(provider.surname)}</strong>
+                    <br><small>⭐ ${provider.rating || 'New'} | ${escapeHtml(provider.servicetype)}</small>
                     <hr>
                 </div>
             `).join('');
@@ -344,43 +319,3 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
     }
 });
-
-const providers = {
-  john: {
-    name: "John",
-    service: "Math Tutor",
-    rating: "⭐ 4.8 / 5",
-    experience: "3 years tutoring university math",
-    about: "Specializes in calculus and algebra. Helps students prepare for exams and assignments."
-  },
-  lerato: {
-    name: "Lerato",
-    service: "Writing Coach",
-    rating: "⭐ 4.9 / 5",
-    experience: "4 years academic writing support",
-    about: "Assists with essays, research papers, and proofreading."
-  },
-  sam: {
-    name: "Sam",
-    service: "Fitness Trainer",
-    rating: "⭐ 4.7 / 5",
-    experience: "Certified trainer with 5 years experience",
-    about: "Offers personalized workout plans and fitness coaching."
-  }
-};
-
-function viewProfile(providerKey) {
-  const provider = providers[providerKey];
-
-  document.getElementById("provider-name").textContent = provider.name;
-  document.getElementById("provider-service").textContent = provider.service;
-  document.getElementById("provider-rating").textContent = provider.rating;
-  document.getElementById("provider-experience").textContent = provider.experience;
-  document.getElementById("provider-about").textContent = provider.about;
-
-  document.getElementById("profile-modal").style.display = "block";
-}
-
-function closeProfile() {
-  document.getElementById("profile-modal").style.display = "none";
-}

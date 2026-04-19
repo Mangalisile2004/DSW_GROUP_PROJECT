@@ -1,5 +1,8 @@
 // ========== PROVIDER DASHBOARD JS ==========
 
+// ===== API CONFIGURATION =====
+const API_URL = 'https://campus-connect-api-g1z.onrender.com';
+
 // Get email from URL
 const urlParams = new URLSearchParams(window.location.search);
 const providerEmail = urlParams.get('email');
@@ -32,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 // Load provider data from backend
 async function loadProviderData(email) {
     try {
-        const response = await fetch(`http://localhost:3000/provider/${encodeURIComponent(email)}`);
+        const response = await fetch(`${API_URL}/provider/${encodeURIComponent(email)}`);
         const data = await response.json();
         
         if (data.success) {
@@ -41,28 +44,28 @@ async function loadProviderData(email) {
             // Update profile modal fields
             const fullNameInput = document.getElementById('fullNameInput');
             const emailInput = document.getElementById('emailInput');
-            if (fullNameInput) fullNameInput.value = `${providerData.FullName} ${providerData.Surname}`;
-            if (emailInput) emailInput.value = providerData.Email;
+            if (fullNameInput) fullNameInput.value = `${providerData.fullname} ${providerData.surname}`;
+            if (emailInput) emailInput.value = providerData.email;
             
             // Update stats
-            servicesCount = providerData.ServiceType ? 1 : 0;
+            servicesCount = providerData.servicetype ? 1 : 0;
             updateUI();
             
             // Update profile circle initials
-            const initials = `${providerData.FullName.charAt(0)}${providerData.Surname.charAt(0)}`;
+            const initials = `${providerData.fullname.charAt(0)}${providerData.surname.charAt(0)}`;
             const avatarPreview = document.getElementById('avatarPreviewText');
             if (avatarPreview) avatarPreview.innerText = initials;
         }
     } catch (error) {
         console.error('Error loading provider data:', error);
-        showToast('Failed to load provider data');
+        showToast('Failed to load provider data. Please try again later.');
     }
 }
 
 // Load provider services
 async function loadProviderServices(email) {
     try {
-        const response = await fetch(`http://localhost:3000/provider-services/${encodeURIComponent(email)}`);
+        const response = await fetch(`${API_URL}/provider-services/${encodeURIComponent(email)}`);
         const data = await response.json();
         
         if (data.success && data.services) {
@@ -71,6 +74,14 @@ async function loadProviderServices(email) {
         }
     } catch (error) {
         console.error('Error loading services:', error);
+    }
+}
+
+// ===== REFRESH SERVICES LIST (Auto-update after adding service) =====
+async function refreshServicesList() {
+    if (providerEmail) {
+        await loadProviderServices(providerEmail);
+        showToast('✅ Services list updated!');
     }
 }
 
@@ -182,26 +193,26 @@ async function saveProfileChanges() {
     const surname = nameParts.slice(1).join(' ') || '';
     
     try {
-        const response = await fetch('http://localhost:3000/provider/update', {
+        const response = await fetch(`${API_URL}/provider/update`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 email: providerEmail,
                 fullName: fullName,
                 surname: surname,
-                bio: providerData?.Bio || '',
-                hourlyRate: providerData?.HourlyRate || 0,
-                campus: providerData?.Campus || '',
-                availability: providerData?.Availability || ''
+                bio: providerData?.bio || '',
+                hourlyRate: providerData?.hourlyrate || 0,
+                campus: providerData?.campus || '',
+                availability: providerData?.availability || ''
             })
         });
         
         const data = await response.json();
         if (data.success) {
             showToast('Profile updated successfully!');
-            // Reload provider data
             await loadProviderData(providerEmail);
         }
+        
     } catch (error) {
         console.error('Error saving profile:', error);
         showToast('Error saving profile');
@@ -210,6 +221,9 @@ async function saveProfileChanges() {
 
 // Make saveProfileChanges available globally for the save button
 window.saveProfileChanges = saveProfileChanges;
+
+// Make refreshServicesList available globally
+window.refreshServicesList = refreshServicesList;
 
 // Toast styling
 const style = document.createElement('style');
