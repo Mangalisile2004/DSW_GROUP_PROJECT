@@ -45,8 +45,9 @@ body {
     background: rgba(255,255,255,0.2);
 }
 
+/* ===== PURPLE GRADIENT FOR HERO (Original Design) ===== */
 .hero {
-    background: linear-gradient(135deg, #00cc7e, #008066);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 60px 20px;
     text-align: center;
     color: white;
@@ -234,9 +235,10 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
+/* ===== PURPLE GRADIENT FOR SERVICE IMAGES (Original Design) ===== */
 .service-image {
     height: 180px;
-    background: linear-gradient(135deg, #00cc7e, #008066);
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
     justify-content: center;
