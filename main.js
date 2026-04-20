@@ -1,5 +1,5 @@
 // ===== API CONFIGURATION =====
-const API_URL = 'https://campus-connect-api-g1z.onrender.com';
+const API_URL = 'https://campus-connect-api-g1jz.onrender.com';
 
 function openModal() {
     document.getElementById("signupModal").style.display = "block";
