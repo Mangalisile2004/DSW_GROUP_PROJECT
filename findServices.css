@@ -1,4 +1,4 @@
-/*  GLOBAL STYLES  */
+
 * {
     margin: 0;
     padding: 0;
@@ -11,9 +11,11 @@ body {
     min-height: 100vh;
 }
 
+
 /*  HEADER  */
+
 .header {
-    background: linear-gradient(135deg, #2eb997 0%, #084d43 100%);
+    background: linear-gradient(135deg, #00cc7e44, #00d9ff);
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
@@ -47,7 +49,6 @@ body {
     background: rgba(255,255,255,0.2);
 }
 
-/*  HERO SECTION  */
 .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 60px 20px;
@@ -66,7 +67,6 @@ body {
     opacity: 0.9;
 }
 
-/*  SEARCH SECTION  */
 .search-section {
     max-width: 1200px;
     margin: -30px auto 40px;
@@ -111,8 +111,8 @@ body {
 
 .search-input-wrapper input:focus {
     outline: none;
-    border-color: #2eb997;
-    box-shadow: 0 0 0 3px rgba(46, 185, 151, 0.1);
+    border-color: #00cc7e;
+    box-shadow: 0 0 0 3px rgba(0, 204, 126, 0.1);
 }
 
 .filter-group {
@@ -141,12 +141,12 @@ body {
 
 .filter-group select:focus {
     outline: none;
-    border-color: #2eb997;
+    border-color: #00cc7e;
 }
 
 .search-btn {
     padding: 15px 30px;
-    background: linear-gradient(135deg, #2eb997, #084d43);
+    background: linear-gradient(135deg,#00cc7e44, #00d9ff);
     color: white;
     border: none;
     border-radius: 50px;
@@ -157,7 +157,7 @@ body {
 
 .search-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(46, 185, 151, 0.4);
+    box-shadow: 0 4px 15px rgba(0, 204, 126, 0.4);
 }
 
 /*  CATEGORY FILTERS  */
@@ -180,7 +180,7 @@ body {
 }
 
 .category-chip:hover, .category-chip.active {
-    background: linear-gradient(135deg, #2eb997, #084d43);
+    background: linear-gradient(135deg,#00cc7e44, #00d9ff);
     color: white;
     transform: translateY(-2px);
 }
@@ -238,6 +238,7 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.15);
 }
 
+/* ===== PURPLE GRADIENT FOR SERVICE IMAGES (Original Design) ===== */
 .service-image {
     height: 180px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -277,7 +278,7 @@ body {
 }
 
 .service-type {
-    color: #2eb997;
+    color: #00cc7e;
     font-size: 14px;
     font-weight: 600;
     margin-bottom: 10px;
@@ -338,7 +339,7 @@ body {
 .view-profile-btn {
     width: 100%;
     padding: 12px;
-    background: linear-gradient(135deg, #2eb997, #084d43);
+    background: linear-gradient(135deg, #00cc7e44, #00d9ff);
     color: white;
     border: none;
     border-radius: 12px;
@@ -349,7 +350,7 @@ body {
 
 .view-profile-btn:hover {
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(46, 185, 151, 0.3);
+    box-shadow: 0 4px 12px rgba(0, 204, 126, 0.3);
 }
 
 /*  LOADING SPINNER */
@@ -362,7 +363,7 @@ body {
 .loading-spinner i {
     font-size: 48px;
     margin-bottom: 15px;
-    color: #2eb997;
+    color: #00cc7e;
 }
 
 /*  NO RESULTS  */
@@ -426,7 +427,7 @@ body {
 }
 
 .close:hover {
-    color: #2eb997;
+    color: #00cc7e;
 }
 
 /*  FOOTER  */
