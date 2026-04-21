@@ -1,8 +1,8 @@
 
-// ===== API CONFIGURATION =====
+//  API CONFIGURATION 
 const API_URL = 'https://campus-connect-api-g1jz.onrender.com'; 
 
-//===== Global Variables =====
+// Global Variables 
 let allServices = [];
 let currentFilters = {
     search: '',
@@ -11,19 +11,19 @@ let currentFilters = {
     category: 'all'
 };
 
-// ===== Check if user is logged in =====
+//  Check if user is logged in 
 function isUserLoggedIn() {
     const userEmail = localStorage.getItem('userEmail');
     const providerEmail = localStorage.getItem('providerEmail');
     return userEmail !== null || providerEmail !== null;
 }
 
-// ===== Get current user email =====
+//  Get current user email 
 function getCurrentUserEmail() {
     return localStorage.getItem('userEmail') || localStorage.getItem('providerEmail');
 }
 
-// ===== Test backend connection first =====
+//  Test backend connection first 
 async function testBackendConnection() {
     try {
         console.log('Testing connection to:', `${API_URL}/test`);
@@ -40,7 +40,7 @@ async function testBackendConnection() {
     return false;
 }
 
-// ===== Show connection error message =====
+//  Show connection error message 
 function showConnectionError() {
     const grid = document.getElementById('servicesGrid');
     grid.innerHTML = `
@@ -60,7 +60,7 @@ function showConnectionError() {
     `;
 }
 
-// ===== Load Services on Page Load =====
+// Load Services on Page Load 
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('Find Services page loaded');
     
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     setupCategoryFilters();
 });
 
-// ===== Setup Event Listeners =====
+//  Setup Event Listeners 
 function setupEventListeners() {
     // Search on Enter key
     const searchInput = document.getElementById('searchInput');
@@ -93,7 +93,7 @@ function setupEventListeners() {
     if (priceFilter) priceFilter.addEventListener('change', () => searchServices());
 }
 
-// ===== Setup Category Filters =====
+//  Setup Category Filters 
 function setupCategoryFilters() {
     const categoryChips = document.querySelectorAll('.category-chip');
     categoryChips.forEach(chip => {
@@ -106,7 +106,7 @@ function setupCategoryFilters() {
     });
 }
 
-// ===== Load Services from Backend =====
+//  Load Services from Backend 
 async function loadServices() {
     try {
         showLoading();
@@ -132,7 +132,7 @@ async function loadServices() {
     }
 }
 
-// ===== Filter and Display Services =====
+// Filter and Display Services 
 function filterAndDisplayServices() {
     let filtered = [...allServices];
     
@@ -183,7 +183,7 @@ function filterAndDisplayServices() {
     updateResultsCount(filtered.length);
 }
 
-// ===== Sort Services =====
+//  Sort Services 
 function sortServicesList(services) {
     const sortBy = document.getElementById('sortSelect')?.value || 'rating';
     
@@ -204,7 +204,7 @@ function sortServices() {
     filterAndDisplayServices();
 }
 
-// ===== Display Services in Grid =====
+// Display Services in Grid 
 function displayServices(services) {
     const grid = document.getElementById('servicesGrid');
     
@@ -252,7 +252,7 @@ function displayServices(services) {
     `).join('');
 }
 
-// ===== Show Service Detail Modal =====
+//  Show Service Detail Modal 
 function showServiceDetail(service) {
     const modal = document.getElementById('serviceModal');
     const modalContent = document.getElementById('modalContent');
@@ -318,7 +318,7 @@ function closeServiceModal() {
     modal.style.display = 'none';
 }
 
-// ===== Request Booking =====
+//  Request Booking 
 function requestBooking(providerId) {
     if (!isUserLoggedIn()) {
         alert('Please log in to request a booking');
@@ -330,7 +330,7 @@ function requestBooking(providerId) {
     closeServiceModal();
 }
 
-// ===== Search Functions =====
+//  Search Functions 
 function searchServices() {
     currentFilters.search = document.getElementById('searchInput').value;
     currentFilters.campus = document.getElementById('campusFilter').value;
@@ -360,7 +360,7 @@ function resetFilters() {
     filterAndDisplayServices();
 }
 
-// ===== Helper Functions =====
+//  Helper Functions 
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     resultsCount.textContent = `Found ${count} service${count !== 1 ? 's' : ''}`;

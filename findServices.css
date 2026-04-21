@@ -1,4 +1,4 @@
-/* ===== GLOBAL STYLES ===== */
+/*  GLOBAL STYLES  */
 * {
     margin: 0;
     padding: 0;
@@ -11,7 +11,7 @@ body {
     min-height: 100vh;
 }
 
-/* ===== HEADER ===== */
+/*  HEADER  */
 .header {
     background: linear-gradient(135deg, #2eb997 0%, #084d43 100%);
     padding: 15px 40px;
@@ -47,7 +47,7 @@ body {
     background: rgba(255,255,255,0.2);
 }
 
-/* ===== HERO SECTION ===== */
+/*  HERO SECTION  */
 .hero {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     padding: 60px 20px;
@@ -66,7 +66,7 @@ body {
     opacity: 0.9;
 }
 
-/* ===== SEARCH SECTION ===== */
+/*  SEARCH SECTION  */
 .search-section {
     max-width: 1200px;
     margin: -30px auto 40px;
@@ -160,7 +160,7 @@ body {
     box-shadow: 0 4px 15px rgba(46, 185, 151, 0.4);
 }
 
-/* ===== CATEGORY FILTERS ===== */
+/*  CATEGORY FILTERS  */
 .category-filters {
     display: flex;
     gap: 12px;
@@ -185,7 +185,7 @@ body {
     transform: translateY(-2px);
 }
 
-/* ===== RESULTS SECTION ===== */
+/*  RESULTS SECTION  */
 .results-section {
     max-width: 1200px;
     margin: 0 auto 60px;
@@ -216,7 +216,7 @@ body {
     font-size: 14px;
 }
 
-/* ===== SERVICES GRID ===== */
+/* SERVICES GRID  */
 .services-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -352,7 +352,7 @@ body {
     box-shadow: 0 4px 12px rgba(46, 185, 151, 0.3);
 }
 
-/* ===== LOADING SPINNER ===== */
+/*  LOADING SPINNER */
 .loading-spinner {
     text-align: center;
     padding: 60px;
@@ -365,7 +365,7 @@ body {
     color: #2eb997;
 }
 
-/* ===== NO RESULTS ===== */
+/*  NO RESULTS  */
 .no-results {
     text-align: center;
     padding: 60px;
@@ -388,7 +388,7 @@ body {
     color: #64748b;
 }
 
-/* ===== MODAL ===== */
+/*  MODAL  */
 .modal {
     display: none;
     position: fixed;
@@ -429,7 +429,7 @@ body {
     color: #2eb997;
 }
 
-/* ===== FOOTER ===== */
+/*  FOOTER  */
 .footer {
     background: #1e293b;
     color: white;
@@ -438,7 +438,7 @@ body {
     margin-top: 60px;
 }
 
-/* ===== ANIMATIONS ===== */
+/* ANIMATIONS  */
 @keyframes fadeInDown {
     from {
         opacity: 0;
@@ -472,7 +472,7 @@ body {
     }
 }
 
-/* ===== RESPONSIVE ===== */
+/*  RESPONSIVE  */
 @media (max-width: 768px) {
     .header {
         flex-direction: column;
