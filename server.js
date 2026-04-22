@@ -1,8 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const { Pool } = require("pg");
 const bcrypt = require("bcrypt");
-const path = require("path");
+const pool = require("./db");  // ← Import the database connection
 
 const app = express();
 app.use(bodyParser.json());
@@ -18,87 +17,10 @@ app.use((req, res, next) => {
     next();
 });
 
-// ===== POSTGRESQL DATABASE CONNECTION =====
-const pool = new Pool({
-    connectionString: process.env.DATABASE_URL || "postgresql://campusadmin:Z0fF9lAOagrJn8xHXs2NZ5YYptSFmDe4@dpg-d7ieh0m7r5hc73c8kcc0-a:5432/campusconnectdb_pcwk",
-    ssl: {
-        rejectUnauthorized: false
-    }
-});
-
-pool.connect((err, client, release) => {
-    if (err) {
-        console.error("❌ Database connection error:", err.message);
-    } else {
-        console.log("✅ Connected to PostgreSQL Database");
-        release();
-    }
-});
-
-// ===== TEST ENDPOINTS =====
+// ===== TEST ENDPOINT =====
 app.get("/test", (req, res) => {
     res.json({ message: "Server is running!", dbConnected: true });
 });
-
-app.get("/health", (req, res) => {
-    res.json({ 
-        status: 'OK', 
-        dbConnected: true,
-        timestamp: new Date().toISOString()
-    });
-});
-
-// ===== CREATE TABLES IF NOT EXISTS =====
-async function createTables() {
-    try {
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS serviceseekers (
-                id SERIAL PRIMARY KEY,
-                fullname VARCHAR(100) NOT NULL,
-                surname VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                passwordhash VARCHAR(255) NOT NULL,
-                serviceneeded TEXT,
-                studentnumber VARCHAR(50)
-            )
-        `);
-        console.log("✅ ServiceSeekers table ready");
-
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS serviceproviders (
-                id SERIAL PRIMARY KEY,
-                fullname VARCHAR(100) NOT NULL,
-                surname VARCHAR(100) NOT NULL,
-                email VARCHAR(100) UNIQUE NOT NULL,
-                studentnumber VARCHAR(50),
-                passwordhash VARCHAR(255) NOT NULL,
-                servicetype VARCHAR(100),
-                bio TEXT,
-                hourlyrate DECIMAL(10,2),
-                campus VARCHAR(100),
-                availability VARCHAR(200),
-                rating DECIMAL(3,2) DEFAULT 0
-            )
-        `);
-        console.log("✅ ServiceProviders table ready");
-
-        await pool.query(`
-            CREATE TABLE IF NOT EXISTS bookings (
-                id SERIAL PRIMARY KEY,
-                seekerid INTEGER REFERENCES serviceseekers(id),
-                providerid INTEGER REFERENCES serviceproviders(id),
-                servicedate TIMESTAMP,
-                status VARCHAR(50) DEFAULT 'Pending',
-                createdat TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-            )
-        `);
-        console.log("✅ Bookings table ready");
-    } catch (err) {
-        console.error("Error creating tables:", err);
-    }
-}
-
-createTables();
 
 // ===== SIGNUP ENDPOINT (Service Seeker) =====
 app.post("/signup", async (req, res) => {
@@ -109,6 +31,7 @@ app.post("/signup", async (req, res) => {
     }
     
     try {
+        // Check if user exists
         const checkUser = await pool.query(
             "SELECT * FROM serviceseekers WHERE email = $1",
             [email]
@@ -120,13 +43,13 @@ app.post("/signup", async (req, res) => {
         
         const hashedPassword = await bcrypt.hash(password, 10);
         
-        await pool.query(
+        const result = await pool.query(
             `INSERT INTO serviceseekers (fullname, surname, email, passwordhash, serviceneeded, studentnumber) 
-             VALUES ($1, $2, $3, $4, $5, $6)`,
+             VALUES ($1, $2, $3, $4, $5, $6) RETURNING *`,
             [fullName, surname, email, hashedPassword, servicesNeeded || null, studentNumber || null]
         );
         
-        res.json({ success: true, message: "Sign-up successful!" });
+        res.json({ success: true, message: "Sign-up successful!", user: result.rows[0] });
     } catch (err) {
         console.error("Error:", err);
         res.status(500).json({ success: false, message: err.message });
@@ -206,27 +129,6 @@ app.get("/providers", async (req, res) => {
     }
 });
 
-// ===== GET PROVIDER BY EMAIL =====
-app.get("/provider/:email", async (req, res) => {
-    const { email } = req.params;
-    
-    try {
-        const result = await pool.query(
-            "SELECT id, fullname, surname, email, studentnumber, servicetype, bio, hourlyrate, campus, availability, rating FROM serviceproviders WHERE email = $1",
-            [email]
-        );
-        
-        if (result.rows.length === 0) {
-            return res.status(404).json({ success: false, message: "Provider not found" });
-        }
-        
-        res.json({ success: true, provider: result.rows[0] });
-    } catch (err) {
-        console.error("Error fetching provider:", err);
-        res.status(500).json({ success: false, message: "Failed to fetch provider" });
-    }
-});
-
 // ===== PROVIDER SIGNUP =====
 app.post("/provider/signup", async (req, res) => {
     const { fullName, surname, email, studentNumber, password, serviceType, bio, hourlyRate, campus, availability } = req.body;
@@ -260,62 +162,51 @@ app.post("/provider/signup", async (req, res) => {
     }
 });
 
-// ===== UPDATE PROVIDER PROFILE =====
-app.put("/provider/update", async (req, res) => {
-    const { email, fullName, surname, bio, hourlyRate, campus, availability } = req.body;
-    
-    try {
-        await pool.query(
-            `UPDATE serviceproviders 
-             SET fullname = $1, surname = $2, bio = $3, hourlyrate = $4, campus = $5, availability = $6
-             WHERE email = $7`,
-            [fullName, surname, bio || null, hourlyRate || null, campus || null, availability || null, email]
-        );
-        
-        res.json({ success: true, message: "Profile updated successfully!" });
-    } catch (err) {
-        console.error("Error updating provider:", err);
-        res.status(500).json({ success: false, message: err.message });
-    }
-});
-
-// ===== GET ALL USERS =====
-app.get("/users", async (req, res) => {
-    try {
-        const result = await pool.query(
-            "SELECT id, fullname, surname, email, serviceneeded, studentnumber FROM serviceseekers"
-        );
-        res.json({ success: true, users: result.rows });
-    } catch (err) {
-        console.error("Error fetching users:", err);
-        res.status(500).json({ success: false, message: "Failed to fetch users" });
-    }
-});
-
-// ===== GET PROVIDER SERVICES =====
-app.get("/provider-services/:email", async (req, res) => {
-    const { email } = req.params;
+// ===== PROVIDER LOGIN =====
+app.post("/provider/login", async (req, res) => {
+    const { email, password } = req.body;
     
     try {
         const result = await pool.query(
-            "SELECT id, servicetype, bio, hourlyrate, campus, availability, rating FROM serviceproviders WHERE email = $1",
+            "SELECT * FROM serviceproviders WHERE email = $1",
             [email]
         );
         
-        res.json({ success: true, services: result.rows });
+        if (result.rows.length === 0) {
+            return res.status(401).json({ success: false, message: "Invalid credentials" });
+        }
+        
+        const provider = result.rows[0];
+        const passwordMatch = await bcrypt.compare(password, provider.passwordhash);
+        
+        if (passwordMatch) {
+            res.json({ 
+                success: true, 
+                message: "Login successful!", 
+                provider: {
+                    id: provider.id,
+                    fullName: provider.fullname,
+                    surname: provider.surname,
+                    email: provider.email,
+                    serviceType: provider.servicetype
+                }
+            });
+        } else {
+            res.status(401).json({ success: false, message: "Invalid credentials" });
+        }
     } catch (err) {
-        console.error("Error fetching provider services:", err);
-        res.status(500).json({ success: false, message: "Failed to fetch services" });
+        console.error("Provider login error:", err);
+        res.status(500).json({ success: false, message: "Login failed" });
     }
 });
 
 // ===== START SERVER =====
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, "0.0.0.0", () => {
     console.log(`✅ Server running on port ${PORT}`);
     console.log(`📝 Test: GET /test`);
     console.log(`📝 Signup: POST /signup`);
     console.log(`📝 Login: POST /login`);
+    console.log(`📝 Provider Login: POST /provider/login`);
     console.log(`📝 Providers: GET /providers`);
-    console.log(`📝 Provider Services: GET /provider-services/:email`);
 });
