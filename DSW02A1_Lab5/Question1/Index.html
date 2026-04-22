@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cars Game</title>
+    <script src="cars.js" defer></script>
+    <link rel="stylesheet" href="cars.css" />
+</head>
+<body>
+      <h1>Vintage Cars</h1>
+  <p>Guess which car belongs to which make?</p>
+  <div id="car-info">
+    <h2><span id="car-name"></span> (<span id="car-type"></span>)</h2>
+    <img class="hidden" id="car-img" src="" alt="super cute car" />
+  </div>
+  <div id="guess-ui">
+    Make:
+    <select id="make-list"></select>
+    <button class="disabled" id="guess-btn">Guess!</button>
+  </div>
+  <div>
+    <p>Correct guesses: <span id="correct">0</span></p>
+    <p>Total guesses: <span id="total">0</span></p>
+  </div>
+</body>
+</html>
