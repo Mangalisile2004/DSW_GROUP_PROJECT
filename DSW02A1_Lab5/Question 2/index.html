@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr. Surname Blender</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Mr. Surname Blender</h1>
+
+  <div>
+    <span>Surname:</span>
+    <input id="surname" type="text" size="20" />
+  </div>
+
+  <div>
+    <span>Font:</span>
+    <select id="font">
+      <option>Arial</option>
+      <option>Comic Sans MS</option>
+      <option>Times New Roman</option>
+      <option>Verdana</option> 
+    </select>
+  </div>
+
+  <div>
+    <span>Position:</span>
+    <input id="sequential" name="pos" type="radio" value="seq" checked="checked" />
+    <input id="random" name="pos" type="radio" value="rand" /> 
+    <input id="reverse" name="pos" type="radio" value="rev" />
+  </div>
+
+
+  <div>
+    <span>Color:</span>
+    <select id="color">
+      <option>Black</option>
+      <option>Red</option>
+      <option>Blue</option>
+      <option>Green</option>
+    </select>
+    <span>Font size:</span>
+    <input id="fontSize" type="number" placeholder="font size" value="16" />
+    <button id="style-btn">Apply Style</button>
+  </div>
+
+  <button id="blend-btn">Blend Now</button>
+
+  <div id="output"></div>
+
+  <script src="surnameBlender.js"></script>
+</body>
+</html>
