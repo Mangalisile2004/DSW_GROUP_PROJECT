@@ -7,7 +7,7 @@
   <!-- Google Fonts & Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="providerDashboard.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -86,6 +86,7 @@
     </div>
     <div class="actions-card"><div class="actions-title">⚡ Quick Actions</div>
       <div class="action-buttons"><button class="action-btn" id="addServiceBtn">➕ Add New Service</button><button 
+        
         class="action-btn" id="viewBookingsBtn">📋 View Bookings</button><button 
         class="action-btn" id="checkNotifBtn">🔔 Check Notifications</button></div>
     </div>
@@ -103,11 +104,69 @@
   </div>
 </div>
 
+<!-- View Bookings Modal -->
+<div id="viewBookingsModal" class="modal">
+    <div class="modal-card" style="max-width: 700px; max-height: 80vh; overflow-y: auto;">
+        <div class="modal-header">
+            <h3><i class="fas fa-calendar-alt"></i> My Bookings</h3>
+            <button class="close-modal" onclick="closeModal('viewBookingsModal')">&times;</button>
+        </div>
+        <div id="bookingsListContent">
+            <div class="loading-spinner" style="text-align: center; padding: 40px;">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>Loading bookings...</p>
+            </div>
+        </div>
+        <div class="modal-footer" style="margin-top: 20px; text-align: center;">
+            <button class="btn-cancel" onclick="closeModal('viewBookingsModal')">Close</button>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications Modal -->
+<div id="notificationsModal" class="modal">
+    <div class="modal-card" style="max-width: 500px; max-height: 70vh; overflow-y: auto;">
+        <div class="modal-header">
+            <h3><i class="fas fa-bell"></i> Notifications</h3>
+            <button class="close-modal" onclick="closeModal('notificationsModal')">&times;</button>
+        </div>
+        <div id="notificationsListContent">
+            <div class="notif-item">
+                <p>📘 New booking request: Math tutoring (tomorrow)</p>
+                <div class="notif-time">2 hours ago</div>
+            </div>
+            <div class="notif-item">
+                <p>⭐ Your service "Group Study" got 5 stars!</p>
+                <div class="notif-time">Yesterday</div>
+            </div>
+            <div class="notif-item">
+                <p>🗓️ Upcoming booking reminder: Resume review at 3pm</p>
+                <div class="notif-time">5 hours ago</div>
+            </div>
+            <div class="notif-item">
+                <p>💬 Message from Alex: "Can we reschedule?"</p>
+                <div class="notif-time">1 day ago</div>
+            </div>
+            <div class="notif-item">
+                <p>🏆 Campus Connect weekly leaderboard: you're #7!</p>
+                <div class="notif-time">2 days ago</div>
+            </div>
+        </div>
+        <div class="modal-footer" style="margin-top: 20px;">
+            <button class="btn-cancel" onclick="closeModal('notificationsModal')">Close</button>
+            <button class="btn-save" onclick="markAllAsRead()">Mark All as Read</button>
+        </div>
+    </div>
+</div>
+
+<!-- Success Toast Notification -->
+<div id="successToast" class="toast-message" style="display: none;"></div>
+
 <!-- Dynamic Content Container (for non-dashboard pages) -->
 <div id="mainContent" style="display: none;"></div>
 
 <footer><span>📍 Campus Connect • stay connected, share skills</span></footer>
 
-<script src="providerDashboard.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
