@@ -6,13 +6,14 @@
     <title>Campus Connect - Dashboard</title>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <!-- CSS -->
+    <!-- CSS: link BOTH stylesheets so all your existing styles apply -->
     <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboardCss.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
 
-    <!--COOKIE CONSENT BANNER-->
+<!-- ─── COOKIE CONSENT BANNER (from file 1) ─────────────────────────────── -->
 <div id="cookie-banner" class="cookie-banner">
   <div class="cookie-banner-icon">🍪</div>
   <div class="cookie-banner-text">
@@ -24,6 +25,7 @@
     </p>
   </div>
   <div class="cookie-actions">
+    <!-- renderRecommended() is defined in dashboard.js -->
     <button class="btn-accept" onclick="CookieManager.acceptCookies(); renderRecommended()">
       <i class="fas fa-check"></i> Accept All
     </button>
@@ -33,7 +35,7 @@
   </div>
 </div>
 
-    
+<!-- ─── HEADER ───────────────────────────────────────────────────────────── -->
 <header class="dashboard-header">
     <div class="left-header">
         <span id="menuToggle" class="hamburger" onclick="toggleSidebar()">
@@ -53,10 +55,12 @@
     </div>
 </header>
 
-<!-- Sidebar -->
+<!-- ─── SIDEBAR ──────────────────────────────────────────────────────────── -->
 <aside id="sidebar" class="sidebar">
     <div class="profile-header">
-        <img id="profileImage" src="https://ui-avatars.com/api/?background=2563eb&color=fff&size=120&name=User" alt="Profile">
+        <img id="profileImage"
+             src="https://ui-avatars.com/api/?background=2563eb&color=fff&size=120&name=User"
+             alt="Profile">
         <h3 id="full-name">Loading...</h3>
         <p id="student-id">Student ID: Loading...</p>
     </div>
@@ -86,40 +90,43 @@
 <!-- Overlay for sidebar -->
 <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
 
+<!-- ─── MAIN ──────────────────────────────────────────────────────────────── -->
 <main class="dashboard-container">
     <section class="dashboard-center">
+
         <div class="welcome-section">
             <h2>Discover Services</h2>
             <p>Find help from fellow students on campus</p>
         </div>
-       <!-- LIVE SEARCH -->
-    <div class="search-wrapper" id="searchWrapper">
-      <div class="search-bar">
-        <i class="fas fa-search"></i>
-        <input
-          type="text"
-          id="searchInput"
-          placeholder="Search by name, service, campus…"
-          autocomplete="off"
-          oninput="onLiveSearch(this.value)"
-          onkeydown="handleKey(event)"
-        >
-        <button class="btn-search" onclick="commitSearch()">Search</button>
-        <button class="btn-clear" onclick="clearSearch()">Clear</button>
-      </div>
-      <div id="searchDropdown" class="search-dropdown"></div>
-    </div>
-        <!-- Search Bar - Only ONE instance -->
-        <div class="search-bar">
-            <i class="fas fa-search"></i>
-            <input type="text" id="searchInput" placeholder="Search by name, service, campus..." onkeypress="handleKeyPress(event)">
-            <button onclick="searchServices()">Search</button>
-            <button onclick="resetToAllProviders()" class="clear-search-btn" style="background: #e2e8f0; color: #333; margin-left: 5px;">Clear</button>
+
+        <!-- ── LIVE SEARCH (from file 1) with dropdown ──────────────────── -->
+        <div class="search-wrapper" id="searchWrapper">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input
+                    type="text"
+                    id="searchInput"
+                    placeholder="Search by name, service, campus…"
+                    autocomplete="off"
+                    oninput="onLiveSearch(this.value)"
+                    onkeydown="handleKey(event)"
+                    onkeypress="handleKeyPress(event)"
+                >
+                <!-- commitSearch / searchServices both trigger a search -->
+                <button class="btn-search" onclick="commitSearch ? commitSearch() : searchServices()">Search</button>
+                <button class="btn-clear  clear-search-btn"
+                        style="background:#e2e8f0;color:#333;margin-left:5px;"
+                        onclick="clearSearch ? clearSearch() : resetToAllProviders()">Clear</button>
+            </div>
+            <!-- Dropdown populated by onLiveSearch() in dashboard.js -->
+            <div id="searchDropdown" class="search-dropdown"></div>
         </div>
 
+        <!-- ── CATEGORIES ────────────────────────────────────────────────── -->
         <div class="categories-section">
             <h3><i class="fas fa-fire"></i> Popular Categories</h3>
             <div class="service-categories">
+                <!-- Original 4 cards -->
                 <div class="card tutoring" onclick="filterByCategory('tutoring')">
                     <i class="fas fa-chalkboard-teacher"></i>
                     <h4>Tutoring</h4>
@@ -140,21 +147,31 @@
                     <h4>Hair & Beauty</h4>
                     <p>Styling & Makeup</p>
                 </div>
-                <div class="cat-card webdev"      onclick="filterByCategory('webdev')">
-          <i class="fas fa-code"></i><h4>Web Dev</h4><p>Websites & Apps</p>
-        </div>
-        <div class="cat-card fitness"     onclick="filterByCategory('fitness')">
-          <i class="fas fa-dumbbell"></i><h4>Fitness</h4><p>Training & Health</p>
-        </div>
-        <div class="cat-card it"          onclick="filterByCategory('it')">
-          <i class="fas fa-laptop-code"></i><h4>IT Support</h4><p>Tech & Repairs</p>
-        </div>
-        <div class="cat-card music"       onclick="filterByCategory('music')">
-          <i class="fas fa-music"></i><h4>Music</h4><p>Lessons & Theory</p>
-        </div>
+                <!-- Extra 4 cards from file 1 -->
+                <div class="card cat-card webdev" onclick="filterByCategory('webdev')">
+                    <i class="fas fa-code"></i>
+                    <h4>Web Dev</h4>
+                    <p>Websites & Apps</p>
+                </div>
+                <div class="card cat-card fitness" onclick="filterByCategory('fitness')">
+                    <i class="fas fa-dumbbell"></i>
+                    <h4>Fitness</h4>
+                    <p>Training & Health</p>
+                </div>
+                <div class="card cat-card it" onclick="filterByCategory('it')">
+                    <i class="fas fa-laptop-code"></i>
+                    <h4>IT Support</h4>
+                    <p>Tech & Repairs</p>
+                </div>
+                <div class="card cat-card music" onclick="filterByCategory('music')">
+                    <i class="fas fa-music"></i>
+                    <h4>Music</h4>
+                    <p>Lessons & Theory</p>
+                </div>
             </div>
         </div>
 
+        <!-- ── TOP RATED PROVIDERS ───────────────────────────────────────── -->
         <div class="providers-section">
             <h3><i class="fas fa-star"></i> Top Rated Providers</h3>
             <div id="providers-list" class="providers-grid">
@@ -167,19 +184,21 @@
         </button>
     </section>
 
+    <!-- ── RIGHT SIDEBAR ─────────────────────────────────────────────────── -->
     <aside class="dashboard-right">
+
         <div class="recommended">
             <h3><i class="fas fa-thumbs-up"></i> Recommended for You</h3>
             <ul id="recommended-list">
                 <li><i class="fas fa-user-graduate"></i> John – Math Tutor
-                <button onclick="viewProfile('john')">View Profile</button></li>
-           
+                    <button onclick="viewProfile('john')">View Profile</button>
+                </li>
                 <li><i class="fas fa-pen-fancy"></i> Lerato – Writing Coach
-                <button onclick="viewProfile('lerato')">View Profile</button></li>
-
+                    <button onclick="viewProfile('lerato')">View Profile</button>
+                </li>
                 <li><i class="fas fa-dumbbell"></i> Sam – Fitness Trainer
-                <button onclick="viewProfile('john')">View Profile</button></li>
-
+                    <button onclick="viewProfile('sam')">View Profile</button>
+                </li>
             </ul>
             <a href="#" onclick="viewAllRecommended()">See All <i class="fas fa-arrow-right"></i></a>
         </div>
@@ -193,52 +212,82 @@
             </ul>
         </div>
 
+        <!-- Stats card – includes "Profiles Viewed" from file 1 -->
         <div class="stats-card">
             <h3><i class="fas fa-chart-simple"></i> Your Activity</h3>
             <div class="stat-item">
                 <span>Services Booked</span>
-                <strong>0</strong>
+                <strong id="stat-booked">0</strong>
             </div>
             <div class="stat-item">
                 <span>Messages Sent</span>
-                <strong>0</strong>
+                <strong id="stat-messages">0</strong>
             </div>
             <div class="stat-item">
                 <span>Favorites</span>
-                <strong>0</strong>
+                <strong id="stat-favorites">0</strong>
             </div>
-             <div class="stat-item"><span>Profiles Viewed</span><strong id="stat-viewed">0</strong></div>
-    </div>
+            <div class="stat-item">
+                <span>Profiles Viewed</span>
+                <strong id="stat-viewed">0</strong>
+            </div>
         </div>
+
     </aside>
 </main>
 
+<!-- ─── FOOTER ───────────────────────────────────────────────────────────── -->
 <footer class="dashboard-footer">
-    <button onclick="openMessages()"><i class="fas fa-comment-dots"></i> Messages <span class="badge">2</span></button>
-    <button onclick="openSaved()"><i class="fas fa-heart"></i> Saved Listings</button>
-    <button onclick="openSettings()"><i class="fas fa-cog"></i> Settings</button>
+    <button onclick="openMessages()">
+        <i class="fas fa-comment-dots"></i> Messages <span class="badge">2</span>
+    </button>
+    <button onclick="openSaved()">
+        <i class="fas fa-heart"></i> Saved Listings
+    </button>
+    <button onclick="openSettings()">
+        <i class="fas fa-cog"></i> Settings
+    </button>
 </footer>
 
-<!-- Modal for providers -->
+<!-- ─── MODALS ───────────────────────────────────────────────────────────── -->
 <div id="providersModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeProvidersModal()">&times;</span>
         <h2>All Service Providers</h2>
         <div id="modalProvidersList"></div>
-    </div>    
+    </div>
 </div>
-    
-<div id="profile-modal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn" onclick="closeProfile()">&times;</span>
-    <h2 id="provider-name"></h2>
-    <p><strong>Service:</strong> <span id="provider-service"></span></p>
-    <p><strong>Rating:</strong> <span id="provider-rating"></span></p>
-    <p><strong>Experience:</strong> <span id="provider-experience"></span></p>
-    <p><strong>About:</strong> <span id="provider-about"></span></p>
-  </div>
-</div> 
 
+<div id="profile-modal" class="modal">
+    <div class="modal-content">
+        <span class="close-btn" onclick="closeProfile()">&times;</span>
+        <h2 id="provider-name"></h2>
+        <p><strong>Service:</strong> <span id="provider-service"></span></p>
+        <p><strong>Rating:</strong> <span id="provider-rating"></span></p>
+        <p><strong>Experience:</strong> <span id="provider-experience"></span></p>
+        <p><strong>About:</strong> <span id="provider-about"></span></p>
+    </div>
+</div>
+
+<!-- ─── SCRIPTS: load BOTH JS files ──────────────────────────────────────── -->
 <script src="dashboard.js"></script>
+<script src="dashboardJS.js"></script>
+
+
+<!-- Safety shim: prevents crashes if a function is only defined in one file -->
+<script>
+    // If one JS file defines a function the other calls, these stubs prevent
+    // "function is not defined" errors during the transition period.
+    function _safe(name, fn) {
+        if (typeof window[name] === 'undefined') window[name] = fn;
+    }
+    _safe('onLiveSearch',        function(){});
+    _safe('handleKey',           function(){});
+    _safe('commitSearch',        function(){ if(typeof searchServices==='function') searchServices(); });
+    _safe('clearSearch',         function(){ if(typeof resetToAllProviders==='function') resetToAllProviders(); });
+    _safe('renderRecommended',   function(){});
+    _safe('CookieManager', { acceptCookies: function(){}, declineCookies: function(){} });
+</script>
+
 </body>
 </html>
