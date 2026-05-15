@@ -21,7 +21,7 @@
     });
   });
 
-  // --- FORM HANDLING (same enhanced logic with confirmation) ---
+  // FORM HANDLING (same enhanced logic with confirmation) 
   (function() {
     const form = document.getElementById('campusContactForm');
     const confirmDiv = document.getElementById('formConfirmation');

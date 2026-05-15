@@ -1,6 +1,6 @@
 // startHustle.js - Updated to use local SQL Server
 
-// ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
+// API CONFIGURATION - USING LOCAL SQL SERVER 
 const API_URL = 'http://10.250.108.184:3000';
 
 // Toggle mobile navigation menu

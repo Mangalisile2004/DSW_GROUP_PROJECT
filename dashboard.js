@@ -1,7 +1,7 @@
-// ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
+// API CONFIGURATION - USING LOCAL SQL SERVER
 const API_URL = 'http://10.250.108.184:3000';
 
-// ===== SIDEBAR FUNCTIONS =====
+// SIDEBAR FUNCTIONS 
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     const overlay = document.getElementById('sidebarOverlay');
@@ -24,14 +24,14 @@ function closeSidebar() {
     }
 }
 
-// ===== LOGOUT FUNCTION =====
+// LOGOUT FUNCTION 
 function logout() {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('providerEmail');
     window.location.href = 'index.html';
 }
 
-// ===== LOAD USER DATA =====
+// LOAD USER DATA
 async function loadUserData(email) {
     try {
         const response = await fetch(`${API_URL}/user/${encodeURIComponent(email)}`);
@@ -70,7 +70,7 @@ async function loadUserData(email) {
     }
 }
 
-// ===== LOAD PROVIDERS =====
+// LOAD PROVIDERS 
 async function loadProviders() {
     try {
         const response = await fetch(`${API_URL}/providers`);
@@ -95,7 +95,7 @@ async function loadProviders() {
     }
 }
 
-// ===== DISPLAY PROVIDERS =====
+// DISPLAY PROVIDERS
 function displayProviders(providers) {
     const container = document.getElementById('providers-list');
     if (!container) return;
@@ -122,7 +122,7 @@ function displayProviders(providers) {
     `).join('');
 }
 
-// ===== HELPER: ESCAPE HTML =====
+// HELPER: ESCAPE HTML
 function escapeHtml(str) {
     if (!str) return '';
     return str
@@ -133,12 +133,12 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
-// ===== VIEW PROVIDER DETAILS =====
+// VIEW PROVIDER DETAILS
 function viewProvider(providerId) {
     alert(`Viewing provider ${providerId} - Full profile coming soon`);
 }
 
-// ===== SEARCH SERVICES =====
+// SEARCH SERVICES 
 async function searchServices() {
     const searchInput = document.getElementById('searchInput');
     const query = searchInput.value.trim().toLowerCase();
@@ -193,7 +193,7 @@ async function searchServices() {
     }
 }
 
-// ===== FILTER BY CATEGORY =====
+// FILTER BY CATEGORY
 async function filterByCategory(category) {
     try {
         const response = await fetch(`${API_URL}/providers`);
@@ -234,21 +234,21 @@ async function filterByCategory(category) {
     }
 }
 
-// ===== RESET TO ALL PROVIDERS =====
+// RESET TO ALL PROVIDERS 
 async function resetToAllProviders() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) searchInput.value = '';
     await loadProviders();
 }
 
-// ===== HANDLE ENTER KEY =====
+// HANDLE ENTER KEY 
 function handleKeyPress(event) {
     if (event.key === 'Enter') {
         searchServices();
     }
 }
 
-// ===== BROWSE ALL PROVIDERS (MODAL) =====
+// BROWSE ALL PROVIDERS (MODAL) 
 function browseAllProviders() {
     const modal = document.getElementById('providersModal');
     if (modal) {
@@ -282,7 +282,7 @@ function closeProvidersModal() {
     if (modal) modal.style.display = 'none';
 }
 
-// ===== OTHER FUNCTIONS =====
+// OTHER FUNCTIONS 
 function editProfile() { alert('Edit Profile feature coming soon'); }
 function viewFavorites() { alert('Favorites feature coming soon'); }
 function viewBookings() { alert('Bookings feature coming soon'); }
@@ -291,7 +291,7 @@ function openMessages() { alert('Messages feature coming soon'); }
 function openSaved() { alert('Saved listings feature coming soon'); }
 function openSettings() { alert('Settings feature coming soon'); }
 
-// ===== CLOSE MODAL WHEN CLICKING OUTSIDE =====
+// CLOSE MODAL WHEN CLICKING OUTSIDE 
 window.onclick = function(event) {
     const modal = document.getElementById('providersModal');
     if (event.target == modal) {
@@ -299,7 +299,7 @@ window.onclick = function(event) {
     }
 }
 
-// ===== DOM CONTENT LOADED - MAIN INITIALIZATION =====
+// DOM CONTENT LOADED - MAIN INITIALIZATION
 document.addEventListener('DOMContentLoaded', async () => {
     console.log('DOM loaded, initializing...');
     

@@ -1,9 +1,9 @@
 // findServices.js - Clean resolved version
 
-// ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
+// API CONFIGURATION - USING LOCAL SQL SERVER 
 const API_URL = 'http://10.250.108.184:3000';
 
-//  Global Variables
+// Global Variables
 let allServices = [];
 let currentFilters = {
     search: '',
@@ -12,7 +12,7 @@ let currentFilters = {
     category: 'all'
 };
 
-// ===== Calculate Monthly Rate from Hourly =====
+// Calculate Monthly Rate from Hourly 
 function calculateMonthlyRate(hourlyRate) {
     if (!hourlyRate || hourlyRate === 'NaN' || isNaN(parseFloat(hourlyRate))) {
         return 0;
@@ -21,7 +21,7 @@ function calculateMonthlyRate(hourlyRate) {
     return parseFloat(hourlyRate) * 160;
 }
 
-// ===== Format Currency =====
+// Format Currency 
 function formatCurrency(amount) {
     if (!amount || amount === 'NaN' || isNaN(amount)) {
         return '0';
@@ -29,19 +29,19 @@ function formatCurrency(amount) {
     return amount.toLocaleString('en-ZA');
 }
 
-//  Check if user is logged in 
+// Check if user is logged in 
 function isUserLoggedIn() {
     const userEmail = localStorage.getItem('userEmail');
     const providerEmail = localStorage.getItem('providerEmail');
     return userEmail !== null || providerEmail !== null;
 }
 
-//  Get current user email 
+// Get current user email 
 function getCurrentUserEmail() {
     return localStorage.getItem('userEmail') || localStorage.getItem('providerEmail');
 }
 
-//  Test backend connection first 
+// Test backend connection first 
 async function testBackendConnection() {
     try {
         console.log('Testing connection to:', `${API_URL}/test`);
@@ -58,7 +58,7 @@ async function testBackendConnection() {
     return false;
 }
 
-//  Show connection error message 
+// Show connection error message 
 function showConnectionError() {
     const grid = document.getElementById('servicesGrid');
     grid.innerHTML = `
@@ -78,7 +78,7 @@ function showConnectionError() {
     `;
 }
 
-// ===== Load Services from Backend =====
+// Load Services from Backend 
 async function loadServices() {
     try {
         showLoading();
@@ -104,7 +104,7 @@ async function loadServices() {
     }
 }
 
-//  Setup Event Listeners 
+// Setup Event Listeners 
 function setupEventListeners() {
     const searchInput = document.getElementById('searchInput');
     if (searchInput) {
@@ -119,7 +119,7 @@ function setupEventListeners() {
     if (priceFilter) priceFilter.addEventListener('change', () => searchServices());
 }
 
-//  Setup Category Filters 
+// Setup Category Filters 
 function setupCategoryFilters() {
     const categoryChips = document.querySelectorAll('.category-chip');
     categoryChips.forEach(chip => {
@@ -183,7 +183,7 @@ function filterAndDisplayServices() {
     updateResultsCount(filtered.length);
 }
 
-//  Sort Services 
+// Sort Services 
 function sortServicesList(services) {
     const sortBy = document.getElementById('sortSelect')?.value || 'rating';
     
@@ -266,7 +266,7 @@ function displayServices(services) {
     `}).join('');
 }
 
-//  Show Service Detail Modal 
+// Show Service Detail Modal 
 function showServiceDetail(service) {
     const modal = document.getElementById('serviceModal');
     const modalContent = document.getElementById('modalContent');
@@ -353,7 +353,7 @@ function requestBooking(providerId) {
     closeServiceModal();
 }
 
-//  Search Functions 
+// Search Functions 
 function searchServices() {
     currentFilters.search = document.getElementById('searchInput').value;
     currentFilters.campus = document.getElementById('campusFilter').value;
@@ -383,7 +383,7 @@ function resetFilters() {
     filterAndDisplayServices();
 }
 
-//  Helper Functions 
+// Helper Functions 
 function updateResultsCount(count) {
     const resultsCount = document.getElementById('resultsCount');
     if (resultsCount) {

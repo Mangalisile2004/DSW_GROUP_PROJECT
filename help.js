@@ -1,18 +1,18 @@
-// ===== API CONFIGURATION =====
+// API CONFIGURATION 
 const API_URL = 'http://10.250.108.184:3000';
 
-// ===== FAQ Accordion Functionality =====
+// FAQ Accordion Functionality 
 function toggleFAQ(element) {
     const faqItem = element.closest('.faq-item');
     faqItem.classList.toggle('active');
 }
 
-// ===== Global Show Alert Function =====
+// Global Show Alert Function 
 function showAlert(pageName) {
     alert(`✨ Campus Connect • ${pageName} page\n\nThis is a demo navigation. The full experience will be available soon! 🎓`);
 }
 
-// ===== CHAT FUNCTIONS =====
+// CHAT FUNCTIONS 
 function toggleChat() {
     const chatWindow = document.getElementById('chatWindow');
     chatWindow.classList.toggle('active');
@@ -116,7 +116,7 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;');
 }
 
-// ===== Initialize Page =====
+// Initialize Page 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Help page loaded - Chat widget ready!');
     console.log('API URL:', API_URL);

@@ -1,4 +1,4 @@
-// ========== PROVIDER DASHBOARD JS ==========
+// PROVIDER DASHBOARD JS 
 
 // ===== API CONFIGURATION - USING LOCAL SQL SERVER =====
 const API_URL = 'http://10.250.108.184:3000';
@@ -77,7 +77,7 @@ async function loadProviderServices(email) {
     }
 }
 
-// ===== REFRESH SERVICES LIST (Auto-update after adding service) =====
+// REFRESH SERVICES LIST (Auto-update after adding service) 
 async function refreshServicesList() {
     if (providerEmail) {
         await loadProviderServices(providerEmail);

@@ -1,7 +1,7 @@
-// ===== API CONFIGURATION =====
+// API CONFIGURATION 
 const API_URL = 'http://10.250.108.184:3000';
 
-// ===== OPEN LOGIN MODAL =====
+// OPEN LOGIN MODAL
 function openLoginModal(type) {
     if (type === 'seeker') {
         document.getElementById('seekerModal').style.display = 'flex';
@@ -10,7 +10,7 @@ function openLoginModal(type) {
     }
 }
 
-// ===== CLOSE MODAL =====
+// CLOSE MODAL
 function closeModal(modalId) {
     document.getElementById(modalId).style.display = 'none';
     if (modalId === 'seekerModal') {
@@ -26,7 +26,7 @@ function closeModal(modalId) {
     }
 }
 
-// ===== CLOSE MODAL WHEN CLICKING OUTSIDE =====
+// CLOSE MODAL WHEN CLICKING OUTSIDE 
 window.onclick = function(event) {
     const modals = document.querySelectorAll('.modal');
     modals.forEach(modal => {
@@ -36,7 +36,7 @@ window.onclick = function(event) {
     });
 }
 
-// ===== SERVICE SEEKER LOGIN =====
+// SERVICE SEEKER LOGIN 
 const seekerForm = document.getElementById('seekerLoginForm');
 if (seekerForm) {
     seekerForm.addEventListener('submit', async function(e) {
@@ -81,7 +81,7 @@ if (seekerForm) {
     });
 }
 
-// ===== SERVICE PROVIDER LOGIN =====
+// SERVICE PROVIDER LOGIN 
 const providerFormElement = document.getElementById('providerLoginForm');
 if (providerFormElement) {
     providerFormElement.addEventListener('submit', async function(e) {

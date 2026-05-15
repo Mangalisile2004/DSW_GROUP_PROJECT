@@ -7,7 +7,7 @@ const { getConnection, sql } = require("./db");
 const app = express();
 const PORT = 3000;
 
-// ===== CORS MIDDLEWARE =====
+// CORS MIDDLEWARE 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
@@ -16,13 +16,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// ===== MIDDLEWARE =====
+// MIDDLEWARE 
 app.use(bodyParser.json());
 app.use(express.static(__dirname));
 
 let dbPool = null;
 
-// ===== DATABASE CONNECTION =====
+// DATABASE CONNECTION 
 getConnection()
   .then(pool => {
     dbPool = pool;
@@ -38,12 +38,12 @@ function getPool() {
   return dbPool;
 }
 
-// ===== TEST ENDPOINT =====
+// TEST ENDPOINT 
 app.get("/test", (req, res) => {
   res.json({ message: "Server is running!", dbConnected: dbPool !== null });
 });
 
-// ===== CHECK TABLES ENDPOINT =====
+// CHECK TABLES ENDPOINT 
 app.get("/check-tables", async (req, res) => {
   try {
     const pool = getPool();
@@ -59,12 +59,12 @@ app.get("/check-tables", async (req, res) => {
   }
 });
 
-// ===== HOMEPAGE ROUTE =====
+// HOMEPAGE ROUTE 
 app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// ===== SIGNUP (Service Seeker) =====
+// SIGNUP (Service Seeker) 
 app.post("/signup", async (req, res) => {
   const { fullName, surname, email, password, servicesNeeded, studentNumber } = req.body;
   if (!fullName || !surname || !email || !password) {
@@ -103,7 +103,7 @@ app.post("/signup", async (req, res) => {
   }
 });
 
-// ===== LOGIN (Service Seeker) =====
+// LOGIN (Service Seeker) 
 app.post("/login", async (req, res) => {
   const { email, password } = req.body;
   
@@ -149,7 +149,7 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// ===== PROVIDER SIGNUP =====
+// PROVIDER SIGNUP 
 app.post("/provider/signup", async (req, res) => {
   const { fullName, surname, email, studentNumber, password, serviceType, bio, hourlyRate, monthlyRate, campus, availability } = req.body;
   
@@ -172,6 +172,7 @@ app.post("/provider/signup", async (req, res) => {
       return res.status(400).json({ success: false, message: "Provider already exists with this email" });
     }
 
+    // ✅ Hash the password properly
     const hashedPassword = await bcrypt.hash(password, 10);
 
     await pool.request()
@@ -179,25 +180,25 @@ app.post("/provider/signup", async (req, res) => {
       .input("surname", sql.NVarChar, surname)
       .input("email", sql.NVarChar, email)
       .input("studentNumber", sql.NVarChar, studentNumber || null)
-      .input("password", sql.NVarChar, hashedPassword)
+      .input("PasswordHash", sql.NVarChar, hashedPassword)   // ✅ fixed: matches DB column
       .input("serviceType", sql.NVarChar, serviceType)
       .input("bio", sql.NVarChar, bio || null)
       .input("hourlyRate", sql.Decimal, finalHourlyRate || null)
       .input("campus", sql.NVarChar, campus || null)
       .input("availability", sql.NVarChar, availability || null)
-      .query(`INSERT INTO ServiceProviders (FullName, Surname, Email, StudentNumber, PasswordHash, ServiceType, Bio, HourlyRate, Campus, Availability, Rating) 
-              VALUES (@fullName, @surname, @email, @studentNumber, @password, @serviceType, @bio, @hourlyRate, @campus, @availability, 0)`);
+      .query(`INSERT INTO ServiceProviders 
+              (FullName, Surname, Email, StudentNumber, PasswordHash, ServiceType, Bio, HourlyRate, Campus, Availability, Rating) 
+              VALUES (@fullName, @surname, @email, @studentNumber, @PasswordHash, @serviceType, @bio, @hourlyRate, @campus, @availability, 0)`);
+
     res.json({ success: true, message: "Service provider signup successful!" });
   } catch (err) {
     console.error("Provider signup error:", err);
-    if (err.message === "Database not connected yet") {
-      return res.status(503).json({ success: false, message: "Database is connecting, please try again" });
-    }
     res.status(500).json({ success: false, message: err.message });
   }
 });
 
-// ===== PROVIDER LOGIN =====
+
+// PROVIDER LOGIN 
 app.post("/provider/login", async (req, res) => {
   const { email, password } = req.body;
   
@@ -242,7 +243,7 @@ app.post("/provider/login", async (req, res) => {
   }
 });
 
-// ===== GET ALL PROVIDERS =====
+// GET ALL PROVIDERS 
 app.get("/providers", async (req, res) => {
   try {
     const pool = getPool();
@@ -268,7 +269,7 @@ app.get("/providers", async (req, res) => {
   }
 });
 
-// ===== CONTACT FORM ENDPOINT =====
+// CONTACT FORM ENDPOINT 
 app.post("/contact", async (req, res) => {
   const { name, email, subject, message } = req.body;
   
@@ -293,7 +294,7 @@ app.post("/contact", async (req, res) => {
   }
 });
 
-// ===== CHATBOT ENDPOINT =====
+// CHATBOT ENDPOINT 
 app.post("/chatbot", async (req, res) => {
   const { message } = req.body;
   
@@ -323,7 +324,7 @@ app.post("/chatbot", async (req, res) => {
   res.json({ success: true, response: response });
 });
 
-// ===== START HTTP SERVER =====
+// START HTTP SERVER 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`\n✅ ===== SERVER RUNNING =====`);
   console.log(`🌐 HTTP Server: http://172.16.16.77:${PORT}`);
