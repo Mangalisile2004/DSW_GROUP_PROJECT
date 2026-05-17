@@ -38,7 +38,50 @@
             <div class="search-bar">
                 <div class="search-input-wrapper">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="searchInput" placeholder="Search by service, name, or keyword...">
+                    <div class="search-bar" id="searchRow">
+
+    <div class="search-input-wrapper">
+        <i class="fas fa-search"></i>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search by service, name, or keyword..."
+            oninput="onLiveSearch(this.value)"
+        >
+
+        <div id="searchDropdown" class="search-dropdown"></div>
+    </div>
+
+    <div class="filter-group">
+        <i class="fas fa-map-marker-alt"></i>
+
+        <select id="campusFilter">
+            <option value="">All Campuses</option>
+            <option value="APB">APB Campus</option>
+            <option value="Kingsway">Kingsway Campus</option>
+            <option value="Doornfontein">Doornfontein Campus</option>
+            <option value="Soweto">Soweto Campus</option>
+        </select>
+    </div>
+
+    <div class="filter-group">
+        <i class="fas fa-tag"></i>
+
+        <select id="priceFilter">
+            <option value="">All Prices</option>
+            <option value="0-100">Under R100</option>
+            <option value="100-300">R100–R300</option>
+            <option value="300-500">R300–R500</option>
+            <option value="500+">R500+</option>
+        </select>
+    </div>
+
+    <button class="search-btn" onclick="searchServices()">
+        <i class="fas fa-search"></i> Search
+    </button>
+
+</div>
                 </div>
                 <div class="filter-group">
                     <i class="fas fa-map-marker-alt"></i>
