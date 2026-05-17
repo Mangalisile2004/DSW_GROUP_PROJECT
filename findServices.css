@@ -26,12 +26,12 @@ body {
 .logo {
     display: flex;
     align-items: center;
+    color: whitesmoke;
 }
 
 .site-logo {
-    width: 70px;
+    width: 80px;
     height: auto;
-    filter: grayscale(100%) brightness(2.5) contrast(1.9);
     margin-right: 10px;
 }
 

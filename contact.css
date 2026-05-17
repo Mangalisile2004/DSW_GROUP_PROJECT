@@ -13,7 +13,7 @@ body {
 
 /* Header Styles */
 .help-header {
-    background: linear-gradient(135deg, #4fb99e 0%, #30d5c8 100%);
+    background: linear-gradient(to right, rgba(67, 192, 192, 0.863), #4aaacfd8);
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
@@ -24,21 +24,12 @@ body {
     z-index: 100;
 }
 
-.help-header .logo h1 {
-    color: white;
-    font-size: 24px;
-    margin: 0;
-}
-
-.help-header .logo i {
-    margin-right: 10px;
-}
-
 .nav-links a {
-    color: white;
+    color: whitesmoke;
     text-decoration: none;
     margin: 0 15px;
-    font-weight: 500;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
     transition: 0.3s;
     padding: 8px 16px;
     border-radius: 25px;
@@ -47,10 +38,25 @@ body {
 .nav-links a:hover, .nav-links a.active {
     background: rgba(255,255,255,0.2);
 }
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    color: whitesmoke;
+}
+
+.site-logo {
+    width: 80px;
+    height: auto;
+    /*filter: grayscale(100%) brightness(2.5) contrast(1.9);*/
+    margin-right: 10px;
+}
 
 /* Hero Section */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: rgb(82, 165, 165);
     padding: 80px 20px;
     text-align: center;
     color: white;
@@ -174,7 +180,7 @@ body {
 }
 
 .btn-submit {
-  background: #0f2b3d;
+  background: orange;
   color: white;
   border: none;
   padding: 12px 28px;
@@ -193,7 +199,7 @@ body {
 }
 
 .btn-submit:hover {
-  background: #f9b81b;
+  background: teal;
   color: #0f2b3d;
   transform: translateY(-2px);
   gap: 16px;

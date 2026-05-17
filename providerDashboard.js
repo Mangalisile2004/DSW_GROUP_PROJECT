@@ -1,11 +1,10 @@
 (function() {
-  // DOM Elements
+  // ========== DOM ELEMENTS ==========
   const drawerOverlay = document.getElementById('drawerOverlay');
   const menuToggle = document.getElementById('menuToggle');
   const profileBtn = document.getElementById('profileCircleBtn');
   const profileModal = document.getElementById('profileModal');
   const passwordModal = document.getElementById('passwordModal');
-  const bookingsModal = document.getElementById('bookingsModal');
   const closeModalBtn = document.getElementById('closeModalBtn');
   const cancelModalBtn = document.getElementById('cancelModalBtn');
   const saveAllBtn = document.getElementById('saveAllBtn');
@@ -14,11 +13,11 @@
   const cancelPwBtn = document.getElementById('cancelPwBtn');
   const submitPw = document.getElementById('submitPwBtn');
   const viewBookingsBtn = document.getElementById('viewBookingsBtn');
-  const closeBookingsModal = document.getElementById('closeBookingsModalBtn');
-  const closeBookingsFooter = document.getElementById('closeBookingsFooterBtn');
   const addServiceBtnDashboard = document.getElementById('addServiceBtn');
   const checkNotifBtn = document.getElementById('checkNotifBtn');
-  const logoutBtn = document.getElementById('logoutBtn');
+  const logoutBtnTop = document.getElementById('logoutBtnTop');
+  const clearNotifBtn = document.getElementById('clearNotifBtn');
+  const newMsgBtn = document.getElementById('newMsgBtn');
 
   // Profile fields
   const fullNameInput = document.getElementById('fullNameInput');
@@ -29,60 +28,90 @@
   const profilePicInput = document.getElementById('profilePicInput');
   const largeAvatarPlaceholder = document.getElementById('largeAvatarPlaceholder');
   const largeAvatarImg = document.getElementById('largeAvatarImg');
-  const avatarPreviewText = document.getElementById('avatarPreviewText');
-  const avatarImage = document.getElementById('avatarImage');
 
-  // Data state
-  let bookingCount = 3;
-  let servicesCount = 2;
+  // ========== DATA STATE ==========
+  let bookings = JSON.parse(localStorage.getItem('userBookings')) || [];
+  let services = JSON.parse(localStorage.getItem('userServices')) || [];
+  let notifications = JSON.parse(localStorage.getItem('liveNotifications')) || [];
 
-  // Toast function
+  // Sample default data if empty
+  if (services.length === 0) {
+    services = [
+      { id: 1, name: "Math Tutoring", category: "Tutoring", price: "$25/hr" },
+      { id: 2, name: "Photography", category: "Photography", price: "$35/session" }
+    ];
+    localStorage.setItem('userServices', JSON.stringify(services));
+  }
+
+  if (bookings.length === 0) {
+    bookings = [
+      { id: 1, service: "Math Tutoring", client: "Emily Chen", date: "2024-01-20", time: "2:00 PM", status: "confirmed" },
+      { id: 2, service: "Photography", client: "Marcus Williams", date: "2024-01-21", time: "4:00 PM", status: "pending" }
+    ];
+    localStorage.setItem('userBookings', JSON.stringify(bookings));
+  }
+
+  if (notifications.length === 0) {
+    notifications = [
+      { id: 1, message: "📘 Welcome to Campus Connect!", time: "Just now", read: false },
+      { id: 2, message: "✨ Complete your profile to get more clients", time: "Just now", read: false }
+    ];
+    localStorage.setItem('liveNotifications', JSON.stringify(notifications));
+  }
+
+  // ========== HELPER FUNCTIONS ==========
+  function saveAllData() {
+    localStorage.setItem('userBookings', JSON.stringify(bookings));
+    localStorage.setItem('userServices', JSON.stringify(services));
+    localStorage.setItem('liveNotifications', JSON.stringify(notifications));
+  }
+
   function showToast(message, type = "success") {
-    // Remove existing toast if any
-    const existingToast = document.getElementById('toast');
-    if (existingToast) existingToast.remove();
-    
-    const toast = document.createElement('div');
-    toast.id = "toast";
-    toast.className = "toast";
+    let toast = document.getElementById('successToast');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'successToast';
+      toast.className = 'toast-message';
+      document.body.appendChild(toast);
+    }
     toast.textContent = message;
-    toast.style.background = type === "error" ? "#dc3545" : type === "warn" ? "#ffc107" : "var(--accent)";
+    toast.style.display = 'block';
+    toast.style.background = type === "error" ? "#dc3545" : type === "warn" ? "#ffc107" : "#1f6392";
     toast.style.color = type === "warn" ? "#333" : "white";
-    document.body.appendChild(toast);
-    
     setTimeout(() => {
-      toast.classList.add('show');
-    }, 10);
-    
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
+      toast.style.display = 'none';
     }, 3000);
   }
 
-  // Helper Functions
   function updateStatsUI() {
-    document.getElementById('bookingsCount').innerText = bookingCount;
-    document.getElementById('servicesCount').innerText = servicesCount;
+    document.getElementById('bookingsCount').innerText = bookings.length;
+    document.getElementById('servicesCount').innerText = services.length;
     updateProgress();
   }
 
   function updateProgress() {
-    let completed = (bookingCount * 5 + servicesCount * 7);
-    let progress = Math.min(100, Math.floor(completed / 2.5));
-    if (progress < 10) progress = 35;
-    progress = Math.min(100, progress);
+    let score = 0;
+    let total = 0;
+    
+    total += 30;
+    score += Math.min(services.length * 10, 30);
+    
+    total += 40;
+    score += Math.min(bookings.length * 10, 40);
+    
+    let percent = Math.min(Math.floor((score / total) * 100), 100);
+    
     const progressFill = document.getElementById('progressFill');
     const progressPercent = document.getElementById('progressPercent');
     const progressMsg = document.getElementById('progressMessage');
     
-    if (progressFill) progressFill.style.width = progress + '%';
-    if (progressPercent) progressPercent.innerText = progress + '%';
+    if (progressFill) progressFill.style.width = percent + '%';
+    if (progressPercent) progressPercent.innerText = percent + '%';
     
     if (progressMsg) {
-      if (progress >= 80) {
+      if (percent >= 80) {
         progressMsg.innerText = "🏆 Excellent progress! Keep it up.";
-      } else if (progress >= 50) {
+      } else if (percent >= 50) {
         progressMsg.innerText = "🎯 You're on track with your goals!";
       } else {
         progressMsg.innerText = "📚 Add more services to boost progress!";
@@ -90,173 +119,67 @@
     }
   }
 
-  function showModal(modal) { 
-    if (modal) modal.style.display = 'flex'; 
-  }
-  
-  function hideModal(modal) { 
-    if (modal) modal.style.display = 'none'; 
-  }
-
-  // Profile Save Handler
-  function handleSaveProfile() {
-    const newName = fullNameInput.value.trim();
-    const newEmail = emailInput.value.trim();
-    if (newName) {
-      localStorage.setItem("profileName", newName);
-      localStorage.setItem("profileEmail", newEmail);
-      showToast(`✅ Profile updated!`);
-    } else {
-      showToast("Please enter a valid name", "warn");
+  // Update Notifications Display
+  function updateNotificationsUI() {
+    const container = document.getElementById('notificationsList');
+    if (!container) return;
+    
+    const unreadCount = notifications.filter(n => !n.read).length;
+    const badge = document.getElementById('notifBadge');
+    if (badge) {
+      badge.innerText = unreadCount + ' new';
+      badge.style.background = unreadCount > 0 ? '#f59e0b' : '#ffedd5';
     }
-    hideModal(profileModal);
-  }
-
-  // Load saved profile data
-  function loadProfileData() {
-    const savedName = localStorage.getItem("profileName");
-    const savedEmail = localStorage.getItem("profileEmail");
-    if (savedName) fullNameInput.value = savedName;
-    if (savedEmail) emailInput.value = savedEmail;
-  }
-
-  // Image Upload
-  if (uploadPicBtn) {
-    uploadPicBtn.addEventListener('click', () => profilePicInput.click());
-  }
-  if (profilePicInput) {
-    profilePicInput.addEventListener('change', (e) => {
-      const file = e.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = function(ev) {
-          const imgUrl = ev.target.result;
-          if (largeAvatarImg) {
-            largeAvatarImg.src = imgUrl;
-            largeAvatarImg.style.display = 'block';
-          }
-          if (largeAvatarPlaceholder) largeAvatarPlaceholder.style.display = 'none';
-          if (avatarImage) {
-            avatarImage.src = imgUrl;
-            avatarImage.style.display = 'block';
-          }
-          if (avatarPreviewText) avatarPreviewText.style.display = 'none';
-          localStorage.setItem("profileAvatar", imgUrl);
-          showToast("Profile picture updated!");
-        };
-        reader.readAsDataURL(file);
-      }
-    });
-  }
-
-  // Load saved avatar
-  function loadAvatar() {
-    const savedAvatar = localStorage.getItem("profileAvatar");
-    if (savedAvatar && largeAvatarImg && avatarImage) {
-      largeAvatarImg.src = savedAvatar;
-      largeAvatarImg.style.display = 'block';
-      if (largeAvatarPlaceholder) largeAvatarPlaceholder.style.display = 'none';
-      avatarImage.src = savedAvatar;
-      avatarImage.style.display = 'block';
-      if (avatarPreviewText) avatarPreviewText.style.display = 'none';
+    
+    if (notifications.length === 0) {
+      container.innerHTML = '<div class="empty-message">✨ No new notifications</div>';
+      return;
     }
-  }
-
-  if (editNameIcon) {
-    editNameIcon.addEventListener('click', () => showToast(`✏️ Name updated to: ${fullNameInput.value}`));
-  }
-  if (editEmailIcon) {
-    editEmailIcon.addEventListener('click', () => showToast(`✉️ Email updated to: ${emailInput.value}`));
-  }
-
-  // Password Modal Flow
-  if (changePwBtn) {
-    changePwBtn.addEventListener('click', () => { 
-      hideModal(profileModal); 
-      showModal(passwordModal); 
-    });
-  }
-  
-  function closePasswordModal() { 
-    hideModal(passwordModal);
-    const currentPw = document.getElementById('currentPassword');
-    const newPw = document.getElementById('newPassword');
-    const confirmPw = document.getElementById('confirmPassword');
-    if (currentPw) currentPw.value = '';
-    if (newPw) newPw.value = '';
-    if (confirmPw) confirmPw.value = '';
-  }
-  
-  if (closePwModal) closePwModal.addEventListener('click', closePasswordModal);
-  if (cancelPwBtn) cancelPwBtn.addEventListener('click', closePasswordModal);
-  
-  if (submitPw) {
-    submitPw.addEventListener('click', () => {
-      const cur = document.getElementById('currentPassword')?.value || '';
-      const newPw = document.getElementById('newPassword')?.value || '';
-      const confirm = document.getElementById('confirmPassword')?.value || '';
-      
-      if (!cur) { 
-        showToast("❌ Please enter current password", "error"); 
-        return; 
-      }
-      if (newPw.length < 6) { 
-        showToast("⚠️ New password must be at least 6 characters", "warn"); 
-        return; 
-      }
-      if (newPw !== confirm) { 
-        showToast("❌ Passwords do not match", "error"); 
-        return; 
-      }
-      localStorage.setItem("password", newPw);
-      showToast("🔐 Password changed successfully!");
-      closePasswordModal();
+    
+    const recentNotifs = notifications.slice(0, 8);
+    container.innerHTML = recentNotifs.map(notif => `
+      <div class="notif-item ${!notif.read ? 'unread' : ''}" data-id="${notif.id}">
+        <p>${notif.message}</p>
+        <div class="notif-time">${notif.time}</div>
+      </div>
+    `).join('');
+    
+    document.querySelectorAll('#notificationsList .notif-item').forEach(el => {
+      el.addEventListener('click', () => {
+        const id = parseInt(el.dataset.id);
+        const notif = notifications.find(n => n.id === id);
+        if (notif && !notif.read) {
+          notif.read = true;
+          saveAllData();
+          updateNotificationsUI();
+          showToast('Marked as read');
+        }
+      });
     });
   }
 
-
-  document.getElementById("addServiceBtn").onclick = function () {
-    window.location.href = "startHustle.html"; // replace with your page
-  };
-
-  
-
-  function addNewService() {
-    servicesCount++;
-    updateStatsUI();
-    showToast(`✨ New service added! Total: ${servicesCount}`);
-  }
-  
-  if (addServiceBtnDashboard) {
-    addServiceBtnDashboard.addEventListener('click', addNewService);
+  function addNotification(message) {
+    const newNotif = {
+      id: Date.now(),
+      message: message,
+      time: "Just now",
+      read: false
+    };
+    notifications.unshift(newNotif);
+    if (notifications.length > 20) notifications.pop();
+    saveAllData();
+    updateNotificationsUI();
+    showToast(message);
   }
 
-  if (checkNotifBtn) {
-    checkNotifBtn.addEventListener('click', () => {
-      showToast("🔔 You have 5 new notifications!");
-    });
+  function clearAllNotifications() {
+    notifications = [];
+    saveAllData();
+    updateNotificationsUI();
+    showToast("✨ All notifications cleared");
   }
 
-  if (logoutBtn) {
-    logoutBtn.addEventListener('click', () => {
-      if (confirm("🚪 Logout from Campus Connect?")) {
-        showToast("Logged out successfully");
-      }
-    });
-  }
-
-  if (profileBtn) {
-    profileBtn.addEventListener('click', () => { 
-      loadProfileData();
-      loadAvatar();
-      showModal(profileModal); 
-    });
-  }
-  if (closeModalBtn) closeModalBtn.addEventListener('click', () => hideModal(profileModal));
-  if (cancelModalBtn) cancelModalBtn.addEventListener('click', () => hideModal(profileModal));
-  if (saveAllBtn) saveAllBtn.addEventListener('click', handleSaveProfile);
-
-  // ===== SETTINGS FUNCTIONS - Direct page render =====
+  // ========== SETTINGS FUNCTIONS ==========
   function renderSettingsPage() {
     const darkOn = localStorage.getItem("darkMode") === "true";
     const notifOn = localStorage.getItem("notifications") !== "false";
@@ -465,8 +388,8 @@
       language: localStorage.getItem("language"),
       profileName: localStorage.getItem("profileName"),
       profileEmail: localStorage.getItem("profileEmail"),
-      bookings: bookingCount,
-      services: servicesCount
+      bookings: bookings.length,
+      services: services.length
     };
     const dataStr = JSON.stringify(data, null, 2);
     const blob = new Blob([dataStr], { type: "application/json" });
@@ -512,13 +435,212 @@
     updateThemeColor(themeColor);
   }
 
-  // DRAWER Navigation Logic
+  // ========== MODAL FUNCTIONS ==========
+  function showModal(modal) { 
+    if (modal) modal.style.display = 'flex'; 
+  }
+  
+  function hideModal(modal) { 
+    if (modal) modal.style.display = 'none'; 
+  }
+
+  // ========== PROFILE FUNCTIONS ==========
+  function handleSaveProfile() {
+    const newName = fullNameInput.value.trim();
+    const newEmail = emailInput.value.trim();
+    if (newName) {
+      localStorage.setItem("profileName", newName);
+      localStorage.setItem("profileEmail", newEmail);
+      showToast(`✅ Profile updated!`);
+    } else {
+      showToast("Please enter a valid name", "warn");
+    }
+    hideModal(profileModal);
+  }
+
+  function loadProfileData() {
+    const savedName = localStorage.getItem("profileName");
+    const savedEmail = localStorage.getItem("profileEmail");
+    if (savedName) fullNameInput.value = savedName;
+    if (savedEmail) emailInput.value = savedEmail;
+  }
+
+  function loadAvatar() {
+    const savedAvatar = localStorage.getItem("profileAvatar");
+    if (savedAvatar && largeAvatarImg) {
+      largeAvatarImg.src = savedAvatar;
+      largeAvatarImg.style.display = 'block';
+      if (largeAvatarPlaceholder) largeAvatarPlaceholder.style.display = 'none';
+    }
+  }
+
+  // Image Upload
+  if (uploadPicBtn) {
+    uploadPicBtn.addEventListener('click', () => profilePicInput.click());
+  }
+  if (profilePicInput) {
+    profilePicInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(ev) {
+          const imgUrl = ev.target.result;
+          if (largeAvatarImg) {
+            largeAvatarImg.src = imgUrl;
+            largeAvatarImg.style.display = 'block';
+          }
+          if (largeAvatarPlaceholder) largeAvatarPlaceholder.style.display = 'none';
+          localStorage.setItem("profileAvatar", imgUrl);
+          showToast("Profile picture updated!");
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+  }
+
+  if (editNameIcon) {
+    editNameIcon.addEventListener('click', () => showToast(`✏️ Name updated to: ${fullNameInput.value}`));
+  }
+  if (editEmailIcon) {
+    editEmailIcon.addEventListener('click', () => showToast(`✉️ Email updated to: ${emailInput.value}`));
+  }
+
+  // ========== PASSWORD MODAL ==========
+  if (changePwBtn) {
+    changePwBtn.addEventListener('click', () => { 
+      hideModal(profileModal); 
+      showModal(passwordModal); 
+    });
+  }
+  
+  function closePasswordModal() { 
+    hideModal(passwordModal);
+    const currentPw = document.getElementById('currentPassword');
+    const newPw = document.getElementById('newPassword');
+    const confirmPw = document.getElementById('confirmPassword');
+    if (currentPw) currentPw.value = '';
+    if (newPw) newPw.value = '';
+    if (confirmPw) confirmPw.value = '';
+  }
+  
+  if (closePwModal) closePwModal.addEventListener('click', closePasswordModal);
+  if (cancelPwBtn) cancelPwBtn.addEventListener('click', closePasswordModal);
+  
+  if (submitPw) {
+    submitPw.addEventListener('click', () => {
+      const cur = document.getElementById('currentPassword')?.value || '';
+      const newPw = document.getElementById('newPassword')?.value || '';
+      const confirm = document.getElementById('confirmPassword')?.value || '';
+      
+      if (!cur) { 
+        showToast("❌ Please enter current password", "error"); 
+        return; 
+      }
+      if (newPw.length < 6) { 
+        showToast("⚠️ New password must be at least 6 characters", "warn"); 
+        return; 
+      }
+      if (newPw !== confirm) { 
+        showToast("❌ Passwords do not match", "error"); 
+        return; 
+      }
+      localStorage.setItem("password", newPw);
+      showToast("🔐 Password changed successfully!");
+      closePasswordModal();
+    });
+  }
+
+  // ========== BUTTON EVENT LISTENERS ==========
+
+  // Add Service Button - Redirect to startHustle.html
+  if (addServiceBtnDashboard) {
+    addServiceBtnDashboard.addEventListener('click', () => {
+      window.location.href = "startHustle.html";
+    });
+  }
+
+  // View Bookings Button - Show modal with bookings
+  if (viewBookingsBtn) {
+    viewBookingsBtn.addEventListener('click', () => {
+      const container = document.getElementById('bookingsListModal');
+      if (!container) return;
+      
+      if (bookings.length === 0) {
+        container.innerHTML = '<div class="empty-message">No bookings yet. Add a booking!</div>';
+      } else {
+        container.innerHTML = bookings.map(b => `
+          <div class="booking-item">
+            <div class="booking-title">📖 ${b.service}</div>
+            <div>👤 Client: ${b.client}</div>
+            <div>📅 ${b.date} at ${b.time}</div>
+            <div>📌 Status: ${b.status}</div>
+          </div>
+        `).join('');
+      }
+      document.getElementById('viewBookingsModal').style.display = 'flex';
+    });
+  }
+
+  // Check Notifications Button
+  if (checkNotifBtn) {
+    checkNotifBtn.addEventListener('click', () => {
+      const unreadCount = notifications.filter(n => !n.read).length;
+      showToast(`🔔 You have ${unreadCount} new notifications!`);
+    });
+  }
+
+  // Clear Notifications Button
+  if (clearNotifBtn) {
+    clearNotifBtn.addEventListener('click', () => {
+      clearAllNotifications();
+    });
+  }
+
+  // New Message Button
+  if (newMsgBtn) {
+    newMsgBtn.addEventListener('click', () => {
+      const receiver = prompt("Enter recipient name:");
+      if (receiver) {
+        const message = prompt("Enter your message:");
+        if (message) {
+          addNotification(`💬 Message sent to ${receiver}: "${message.substring(0, 30)}..."`);
+        }
+      }
+    });
+  }
+
+  // Logout Button - Redirect to homepage (index.html)
+  if (logoutBtnTop) {
+    logoutBtnTop.addEventListener('click', () => {
+      if (confirm("🚪 Are you sure you want to logout?")) {
+        showToast("Logged out successfully!");
+        setTimeout(() => {
+          window.location.href = "index.html";
+        }, 1000);
+      }
+    });
+  }
+
+  // Profile Button
+  if (profileBtn) {
+    profileBtn.addEventListener('click', () => { 
+      loadProfileData();
+      loadAvatar();
+      showModal(profileModal); 
+    });
+  }
+
+  if (closeModalBtn) closeModalBtn.addEventListener('click', () => hideModal(profileModal));
+  if (cancelModalBtn) cancelModalBtn.addEventListener('click', () => hideModal(profileModal));
+  if (saveAllBtn) saveAllBtn.addEventListener('click', handleSaveProfile);
+
+  // ========== DRAWER NAVIGATION ==========
   function closeDrawer() { 
-    drawerOverlay.classList.remove('open'); 
+    if (drawerOverlay) drawerOverlay.classList.remove('open'); 
   }
   
   function openDrawer() { 
-    drawerOverlay.classList.add('open'); 
+    if (drawerOverlay) drawerOverlay.classList.add('open'); 
   }
   
   if (menuToggle) {
@@ -551,50 +673,17 @@
     closeDrawer();
 
     if (sectionId === 'settings') {
-      // Render settings page directly
       mainContentDiv.innerHTML = renderSettingsPage();
       attachSettingsEventListeners();
     } 
-    else if (sectionId === 'bookings') {
-      mainContentDiv.innerHTML = `
-        <h2 style="margin-bottom: 1.5rem;">📅 My Bookings</h2>
-        <div id="detailedBookingList"></div>
-        <button id="simulateBookingBtn" class="action-btn" style="margin-top:1rem;">+ Simulate Booking</button>
-      `;
-      const listDiv = document.getElementById('detailedBookingList');
-      
-      function renderBookingList() {
-        if (!listDiv) return;
-        listDiv.innerHTML = '';
-        if (bookingCount === 0) { 
-          listDiv.innerHTML = '<p>No bookings yet. Add a service or request.</p>'; 
-          return; 
-        }
-        const items = ["Math Tutoring (Tomorrow 2pm)", "Resume Review (Friday 3pm)", "Group Study (Sat 10am)"];
-        for (let i = 0; i < Math.min(bookingCount, items.length); i++) {
-          const card = document.createElement('div'); 
-          card.className = 'service-card'; 
-          card.innerHTML = `<strong>📖 ${items[i]}</strong><div class="notif-time">Confirmed</div>`;
-          listDiv.appendChild(card);
-        }
-      }
-      renderBookingList();
-      
-      const simulateBtn = document.getElementById('simulateBookingBtn');
-      if (simulateBtn) {
-        simulateBtn.onclick = () => { 
-          bookingCount++; 
-          updateStatsUI(); 
-          renderBookingList(); 
-          showToast("➕ New booking added");
-        };
-      }
-    } 
     else if (sectionId === 'favorites') {
       mainContentDiv.innerHTML = `
-        <h2 style="margin-bottom: 1.5rem;">❤️ Favorites</h2>
-        <p>Your saved services: "Group Study Session", "Web Dev Workshop", "Math Tutoring"</p>
-        <button id="clearFavDemo" class="action-btn" style="margin-top: 1rem;">Clear Favorites</button>
+        <div class="actions-card" style="max-width: 600px; margin: 0 auto;">
+          <h2 style="margin-bottom: 1rem;">❤️ Favorites</h2>
+          <p>Your saved services: "Group Study Session", "Web Dev Workshop", "Math Tutoring"</p>
+          <button id="clearFavDemo" class="action-btn" style="margin-top: 1rem;">Clear Favorites</button>
+          <button id="backToDashboard" class="action-btn" style="margin-top: 1rem;">Back to Dashboard</button>
+        </div>
       `;
       const clearBtn = document.getElementById('clearFavDemo');
       if (clearBtn) {
@@ -604,122 +693,79 @@
           showToast("🗑️ Favorites cleared"); 
         };
       }
+      document.getElementById('backToDashboard')?.addEventListener('click', () => setActiveSection('dashboard'));
     }
     else if (sectionId === 'myservices') {
       mainContentDiv.innerHTML = `
-        <h2 style="margin-bottom: 1.5rem;">🛠️ My Services</h2>
-        <div id="serviceListRender"></div>
-        <button id="quickAddServiceBtn" class="action-btn" style="margin-top:1rem;">+ Quick Service</button>
+        <div class="actions-card" style="max-width: 600px; margin: 0 auto;">
+          <h2 style="margin-bottom: 1rem;">🛠️ My Services</h2>
+          <div id="myServicesList"></div>
+          <button id="backToDashboard" class="action-btn" style="margin-top: 1rem;">Back to Dashboard</button>
+        </div>
       `;
-      
-      function renderServices() {
-        const container = document.getElementById('serviceListRender');
-        if (!container) return;
-        container.innerHTML = '';
-        const servicesList = ["📚 Math Tutoring (⭐4.9)", "💻 Web Dev Help (⭐5.0)", "📝 Essay Review (⭐4.7)"];
-        for (let i = 0; i < servicesCount && i < servicesList.length; i++) {
-          const card = document.createElement('div'); 
-          card.className = 'service-card'; 
-          card.innerHTML = servicesList[i];
-          container.appendChild(card);
-        }
-        if (servicesCount > servicesList.length) {
-          container.innerHTML += `<div class="service-card">+ ${servicesCount - servicesList.length} more services</div>`;
+      const listContainer = document.getElementById('myServicesList');
+      if (listContainer) {
+        if (services.length === 0) {
+          listContainer.innerHTML = '<p>No services yet. Click "Add New Service" to get started!</p>';
+        } else {
+          listContainer.innerHTML = services.map(s => `
+            <div class="booking-item" style="margin-bottom: 10px;">
+              <div class="booking-title">${s.name}</div>
+              <div>${s.category} | ${s.price}</div>
+            </div>
+          `).join('');
         }
       }
-      renderServices();
-      
-      const quickAdd = document.getElementById('quickAddServiceBtn');
-      if (quickAdd) {
-        quickAdd.onclick = () => { 
-          servicesCount++; 
-          updateStatsUI(); 
-          renderServices(); 
-          showToast("✨ New service added!"); 
-        };
-      }
+      document.getElementById('backToDashboard')?.addEventListener('click', () => setActiveSection('dashboard'));
     }
     else if (sectionId === 'help') {
-  mainContentDiv.innerHTML = `
-    <h2 style="margin-bottom: 1.5rem;">📞 Help & Support</h2>
-    <div class="faq">
-      <h3>❓ FAQs</h3>
-      <ul style="margin-left:1rem; line-height:1.6;">
-        <li>How to book a service?</li>
-        <li>How to rate a provider?</li>
-        <li>How to reset my password?</li>
-      </ul>
-    </div>
-    <p style="margin-top:1rem;">📧 Email: support@campusconnect.edu</p>
-    <button id="contactSupportBtn" class="action-btn" style="margin-top: 1rem;">Contact Support</button>
-    <button id="reportIssueBtn" class="action-btn" style="margin-top: 0.5rem;">Report an Issue</button>
-    <button id="feedbackBtn" class="action-btn" style="margin-top: 0.5rem;">Send Feedback</button>
-  `;
-
-  // Contact Support → opens a modal form
-  const supportBtn = document.getElementById('contactSupportBtn');
-  if (supportBtn) {
-    supportBtn.onclick = () => {
-      openModal(`
-        <h3>Contact Support</h3>
-        <p>Describe your issue below:</p>
-        <textarea id="supportMessage" rows="4" style="width:100%;"></textarea>
-        <button id="sendSupportMsg" class="action-btn" style="margin-top:1rem;">Send</button>
-      `);
-      document.getElementById('sendSupportMsg').onclick = () => {
-        const msg = document.getElementById('supportMessage').value;
-        if (msg.trim()) {
-          showToast("Support request sent! We'll reply within 24h.");
-          closeModal();
+      mainContentDiv.innerHTML = `
+        <div class="actions-card" style="max-width: 600px; margin: 0 auto;">
+          <h2 style="margin-bottom: 1rem;">📞 Help & Support</h2>
+          <p>📧 Email: support@campusconnect.edu</p>
+          <p>📍 Campus Connect Help Center</p>
+          <button id="backToDashboard" class="action-btn" style="margin-top: 1rem;">Back to Dashboard</button>
+        </div>
+      `;
+      document.getElementById('backToDashboard')?.addEventListener('click', () => setActiveSection('dashboard'));
+    }
+    else if (sectionId === 'bookings') {
+      mainContentDiv.innerHTML = `
+        <div class="actions-card" style="max-width: 600px; margin: 0 auto;">
+          <h2 style="margin-bottom: 1rem;">📅 My Bookings</h2>
+          <div id="myBookingsList"></div>
+          <button id="backToDashboard" class="action-btn" style="margin-top: 1rem;">Back to Dashboard</button>
+        </div>
+      `;
+      const listContainer = document.getElementById('myBookingsList');
+      if (listContainer) {
+        if (bookings.length === 0) {
+          listContainer.innerHTML = '<p>No bookings yet.</p>';
         } else {
-          showToast("Please enter a message before sending.");
+          listContainer.innerHTML = bookings.map(b => `
+            <div class="booking-item" style="margin-bottom: 10px;">
+              <div class="booking-title">📖 ${b.service}</div>
+              <div>👤 Client: ${b.client}</div>
+              <div>📅 ${b.date} at ${b.time}</div>
+              <div>📌 Status: ${b.status}</div>
+            </div>
+          `).join('');
         }
-      };
-    };
-  }
-
-  // Report Issue → logs issue locally (could be sent to backend)
-  const issueBtn = document.getElementById('reportIssueBtn');
-  if (issueBtn) {
-    issueBtn.onclick = () => {
-      const issue = prompt("Please describe the issue you encountered:");
-      if (issue) {
-        console.log("Issue reported:", issue); // placeholder for backend call
-        showToast("Issue reported! Our team will investigate.");
       }
-    };
+      document.getElementById('backToDashboard')?.addEventListener('click', () => setActiveSection('dashboard'));
+    }
+    else {
+      mainContentDiv.innerHTML = `
+        <div class="actions-card" style="max-width: 600px; margin: 0 auto;">
+          <h2>${sectionId}</h2>
+          <p>This page is coming soon!</p>
+          <button id="backToDashboard" class="action-btn" style="margin-top: 1rem;">Back to Dashboard</button>
+        </div>
+      `;
+      document.getElementById('backToDashboard')?.addEventListener('click', () => setActiveSection('dashboard'));
+    }
   }
 
-  // Feedback → collects rating + comment
-  const feedbackBtn = document.getElementById('feedbackBtn');
-  if (feedbackBtn) {
-    feedbackBtn.onclick = () => {
-      openModal(`
-        <h3>Send Feedback</h3>
-        <label>Rate your experience:</label>
-        <select id="feedbackRating" style="width:100%; margin-bottom:1rem;">
-          <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
-          <option value="4">⭐⭐⭐⭐ Good</option>
-          <option value="3">⭐⭐⭐ Average</option>
-          <option value="2">⭐⭐ Poor</option>
-          <option value="1">⭐ Very Poor</option>
-        </select>
-        <textarea id="feedbackMessage" rows="3" style="width:100%;" placeholder="Your comments..."></textarea>
-        <button id="sendFeedback" class="action-btn" style="margin-top:1rem;">Submit</button>
-      `);
-      document.getElementById('sendFeedback').onclick = () => {
-        const rating = document.getElementById('feedbackRating').value;
-        const msg = document.getElementById('feedbackMessage').value;
-        console.log("Feedback submitted:", { rating, msg }); // placeholder for backend call
-        showToast("Thanks for your feedback!");
-        closeModal();
-      };
-    };
-  }
-}
-
-  }
-  
   const drawerItems = document.querySelectorAll('.drawer-nav-item');
   drawerItems.forEach(item => {
     const section = item.getAttribute('data-section');
@@ -730,236 +776,43 @@
       });
     }
   });
-  
-  // Initialize
-  setActiveSection('dashboard');
-  loadSettings();
-  updateStatsUI();
+
+  // ========== AUTO RANDOM NOTIFICATIONS ==========
+  let notificationInterval;
+  function startAutoNotifications() {
+    if (notificationInterval) clearInterval(notificationInterval);
+    notificationInterval = setInterval(() => {
+      const messagesList = [
+        "⭐ Someone liked your service!",
+        "💬 New message waiting for you",
+        "📅 Upcoming booking tomorrow",
+        "🎉 Your profile was viewed 5 times",
+        "💰 New earning opportunity available",
+        "👥 Join the campus networking event"
+      ];
+      const randomMsg = messagesList[Math.floor(Math.random() * messagesList.length)];
+      addNotification(randomMsg);
+    }, 60000);
+  }
+
+  // ========== CLOSE MODAL FUNCTION (global) ==========
+  window.closeModal = function(modalId) {
+    const modal = document.getElementById(modalId);
+    if (modal) modal.style.display = 'none';
+  };
+
+  // ========== INITIALIZE ==========
+  function init() {
+    updateStatsUI();
+    updateNotificationsUI();
+    loadSettings();
+    startAutoNotifications();
+  }
+
+  init();
+
+  // Cleanup on page unload
+  window.addEventListener('beforeunload', () => {
+    if (notificationInterval) clearInterval(notificationInterval);
+  });
 })();
-
-
-
-
-
-// ===== MODAL FUNCTIONS =====
-
-// Close modal function
-function closeModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'none';
-    }
-    document.body.style.overflow = 'auto';
-}
-
-// Show modal function
-function showModal(modalId) {
-    const modal = document.getElementById(modalId);
-    if (modal) {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    }
-}
-
-// Show toast message
-function showToastMessage(message, duration = 3000) {
-    const toast = document.getElementById('successToast');
-    if (!toast) return;
-    
-    toast.textContent = message;
-    toast.style.display = 'block';
-    
-    setTimeout(() => {
-        toast.style.display = 'none';
-    }, duration);
-}
-
-// ===== ADD NEW SERVICE MODAL =====
-document.getElementById('addServiceBtn')?.addEventListener('click', () => {
-    showModal('addServiceModal');
-});
-
-// Handle Add Service Form Submission
-document.getElementById('addServiceForm')?.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    
-    const serviceData = {
-        title: document.getElementById('serviceTitle').value,
-        category: document.getElementById('serviceCategory').value,
-        description: document.getElementById('serviceDescription').value,
-        price: document.getElementById('servicePrice').value,
-        duration: document.getElementById('serviceDuration').value,
-        availability: document.getElementById('serviceAvailability').value,
-        dateAdded: new Date().toISOString()
-    };
-    
-    // Get existing services from localStorage
-    let services = JSON.parse(localStorage.getItem('userServices') || '[]');
-    services.push(serviceData);
-    localStorage.setItem('userServices', JSON.stringify(services));
-    
-    // Update services count in dashboard
-    const servicesCount = services.length;
-    document.getElementById('servicesCount').innerText = servicesCount;
-    
-    showToastMessage('✅ Service added successfully!');
-    closeModal('addServiceModal');
-    
-    // Reset form
-    e.target.reset();
-});
-
-// ===== VIEW BOOKINGS MODAL =====
-document.getElementById('viewBookingsBtn')?.addEventListener('click', () => {
-    loadBookingsContent();
-    showModal('viewBookingsModal');
-});
-
-function loadBookingsContent() {
-    const container = document.getElementById('bookingsListContent');
-    
-    // Get bookings from localStorage or use sample data
-    let bookings = JSON.parse(localStorage.getItem('userBookings') || '[]');
-    
-    if (bookings.length === 0) {
-        // Sample bookings data
-        bookings = [
-            {
-                id: 1,
-                service: "Math Tutoring",
-                student: "Emily Chen",
-                date: "2024-01-20",
-                time: "2:00 PM",
-                status: "confirmed",
-                amount: 45,
-                duration: "1.5 hours"
-            },
-            {
-                id: 2,
-                service: "Web Development Help",
-                student: "Marcus Williams",
-                date: "2024-01-21",
-                time: "4:00 PM",
-                status: "pending",
-                amount: 80,
-                duration: "2 hours"
-            },
-            {
-                id: 3,
-                service: "Resume Review",
-                student: "Sophia Rodriguez",
-                date: "2024-01-19",
-                time: "11:00 AM",
-                status: "completed",
-                amount: 35,
-                duration: "1 hour"
-            }
-        ];
-    }
-    
-    if (bookings.length === 0) {
-        container.innerHTML = `
-            <div style="text-align: center; padding: 40px;">
-                <i class="fas fa-calendar-alt" style="font-size: 48px; color: var(--text-secondary); margin-bottom: 15px;"></i>
-                <p>No bookings yet.</p>
-                <p style="font-size: 13px; margin-top: 10px;">When students book your services, they'll appear here.</p>
-            </div>
-        `;
-        return;
-    }
-    
-    container.innerHTML = bookings.map(booking => `
-        <div class="booking-item">
-            <div class="booking-header">
-                <span class="booking-title">${booking.service}</span>
-                <span class="booking-status status-${booking.status}">
-                    ${booking.status.charAt(0).toUpperCase() + booking.status.slice(1)}
-                </span>
-            </div>
-            <div class="booking-details">
-                <div><i class="fas fa-user"></i> ${booking.student}</div>
-                <div><i class="fas fa-calendar"></i> ${booking.date} at ${booking.time}</div>
-                <div><i class="fas fa-clock"></i> ${booking.duration}</div>
-                <div><i class="fas fa-dollar-sign"></i> $${booking.amount}</div>
-            </div>
-        </div>
-    `).join('');
-}
-
-// ===== NOTIFICATIONS MODAL =====
-document.getElementById('checkNotifBtn')?.addEventListener('click', () => {
-    updateNotificationsBadge();
-    showModal('notificationsModal');
-});
-
-function updateNotificationsBadge() {
-    const notifBadge = document.getElementById('notifBadge');
-    if (notifBadge) {
-        notifBadge.style.display = 'none';
-        // Update notification count in localStorage
-        localStorage.setItem('unreadNotifications', '0');
-    }
-}
-
-function markAllAsRead() {
-    const notifItems = document.querySelectorAll('#notificationsListContent .notif-item');
-    notifItems.forEach(item => {
-        item.style.opacity = '0.6';
-        item.style.backgroundColor = 'var(--bg-primary)';
-    });
-    
-    showToastMessage('✓ All notifications marked as read');
-    
-    setTimeout(() => {
-        closeModal('notificationsModal');
-    }, 1000);
-}
-
-// ===== ADD TO EXISTING NOTIFICATIONS =====
-function addNotification(message, type = 'info') {
-    const notificationsContainer = document.getElementById('notificationsListContent');
-    if (notificationsContainer) {
-        const newNotif = document.createElement('div');
-        newNotif.className = 'notif-item';
-        newNotif.innerHTML = `
-            <p>${message}</p>
-            <div class="notif-time">Just now</div>
-        `;
-        notificationsContainer.insertBefore(newNotif, notificationsContainer.firstChild);
-        
-        // Update badge
-        const badge = document.getElementById('notifBadge');
-        if (badge) {
-            badge.style.display = 'inline-block';
-            const currentCount = parseInt(badge.innerText) || 0;
-            badge.innerText = currentCount + 1;
-        }
-    }
-    
-    showToastMessage(message);
-}
-
-// ===== ALTERNATIVE: Click outside modal to close =====
-document.querySelectorAll('.modal').forEach(modal => {
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        }
-    });
-});
-
-// Load saved services count on page load
-function loadSavedServicesCount() {
-    const services = JSON.parse(localStorage.getItem('userServices') || '[]');
-    const servicesCount = document.getElementById('servicesCount');
-    if (servicesCount) {
-        servicesCount.innerText = services.length;
-    }
-}
-
-// Call on page load
-document.addEventListener('DOMContentLoaded', () => {
-    loadSavedServicesCount();
-});
-

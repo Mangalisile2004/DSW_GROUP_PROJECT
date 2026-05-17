@@ -7,7 +7,7 @@ body {
 
 header {
     background: linear-gradient(to right, rgba(67, 192, 192, 0.863), #4aaacfd8);
-    color: teal;
+    color: whitesmoke;
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
@@ -26,9 +26,9 @@ header h1 {
 }
 
 .site-logo {
-    width: 70px;
+    width: 80px;
     height: auto;
-    filter: grayscale(100%) brightness(2.5) contrast(1.9);
+    /*filter: grayscale(100%) brightness(2.5) contrast(1.9);*/
     margin-right: 10px;
 }
 

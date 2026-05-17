@@ -12,20 +12,26 @@ body {
 
 /* Header */
 .help-header {
-    background: linear-gradient(to right, rgba(36, 139, 139, 0.863), #1b82aad8);
+    background:  linear-gradient(to right, rgba(67, 192, 192, 0.863), #4aaacfd8);
     padding: 15px 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 20px rgba(0,0,0,0.1);
 }
-
-.logo h1 {
-    color: white;
-    font-size: 24px;
+.logo {
+    display: flex;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    font-style: italic;
+    font-weight: 700;
+    color: whitesmoke;
 }
 
-.logo i {
+.site-logo {
+    width: 80px;
+    height: auto;
+    /*filter: grayscale(100%) brightness(2.5) contrast(1.9);*/
     margin-right: 10px;
 }
 
