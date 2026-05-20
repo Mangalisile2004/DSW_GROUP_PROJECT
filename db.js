@@ -1,34 +1,19 @@
-// db.js
-const sql = require("mssql");
+// db.js — Supabase client (server-side, uses service role key)
+require("dotenv").config();
+const { createClient } = require("@supabase/supabase-js");
 
-const config = {
-    user: "sa",
-    password: "CampusConnect2026!",
-    server: "DESKTOP-3D29LS2",
-    database: "CampusConnectDB",
-    options: {
-        trustServerCertificate: true,
-        encrypt: false,
-        enableArithAbort: true,
-        connectionTimeout: 30000,
-        requestTimeout: 30000
-    }
-};
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
-let pool = null;
-
-async function getConnection() {
-    try {
-        if (!pool) {
-            console.log("🔄 Connecting to SQL Server...");
-            pool = await new sql.ConnectionPool(config).connect();
-            console.log("✅ Connected to SQL Server Database");
-        }
-        return pool;
-    } catch (err) {
-        console.error("❌ Database connection error:", err.message);
-        throw err;
-    }
+if (!supabaseUrl || !supabaseKey) {
+  console.error("❌ Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY in .env");
+  process.exit(1);
 }
 
-module.exports = { getConnection, sql };
+const supabase = createClient(supabaseUrl, supabaseKey, {
+  auth: { persistSession: false }
+});
+
+console.log("✅ Supabase client initialised");
+
+module.exports = supabase;

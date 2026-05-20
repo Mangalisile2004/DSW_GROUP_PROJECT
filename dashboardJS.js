@@ -564,7 +564,7 @@ window.openSettings = function () {
   const notifOn = localStorage.getItem("notifications") !== "false";
   const largeText = localStorage.getItem("largeText") === "true";
   const privacy = localStorage.getItem("privacyMode") === "true";
-  const themeColor = localStorage.getItem("themeColor") || "#2eb997";
+  const themeColor = localStorage.getItem("themeColor") || "#3db8b8";
 
   createModal("settingsModal", `<i class="fas fa-cog"></i> Settings`, `
     <div class="settings-section">
@@ -693,9 +693,9 @@ function updateThemeColor(color) {
   localStorage.setItem("themeColor", color);
 }
 window.resetThemeColor = function () {
-  updateThemeColor("#2eb997");
+  updateThemeColor("#3db8b8");
   const picker = document.getElementById("themeColorPicker");
-  if (picker) picker.value = "#2eb997";
+  if (picker) picker.value = "#3db8b8";
   showToast("Accent color reset.");
 };
 function loadThemeColor() {

@@ -1,7 +1,5 @@
-// startHustle.js - Updated to use local SQL Server
-
-// API CONFIGURATION - USING LOCAL SQL SERVER 
-const API_URL = 'http://10.250.108.184:3000';
+// startHustle.js
+const API_URL = '';
 
 // Toggle mobile navigation menu
 function toggleMenu() {
@@ -93,23 +91,28 @@ if (addServiceForm) {
     addServiceForm.addEventListener('submit', async function(e) {
         e.preventDefault();
         
-        const providerEmail = getProviderEmail();
-        
-        if (!providerEmail) {
+        // Get the logged-in provider's ID from localStorage (set during provider login)
+        const providerId = localStorage.getItem('providerId');
+        if (!providerId) {
             alert('Please login as a Service Provider first');
             window.location.href = 'login.html';
             return;
         }
-        
+
+        // Collect all tag span text into a comma-separated string
+        const tagSpans = document.querySelectorAll('.tags-container span');
+        const tags = Array.from(tagSpans).map(s => s.textContent.trim()).join(', ');
+
         const serviceData = {
-            providerEmail: providerEmail,
-            title: document.getElementById('serviceTitle').value,
-            category: document.getElementById('serviceCategory').value,
-            description: document.getElementById('serviceDescription').value,
-            price: parseFloat(document.getElementById('servicePrice').value),
-            priceType: document.getElementById('priceType').value,
-            campus: document.getElementById('campus').value,
-            availability: document.getElementById('availability').value
+            providerId:   parseInt(providerId),
+            title:        document.getElementById('serviceTitle').value,
+            category:     document.getElementById('serviceCategory').value,
+            description:  document.getElementById('serviceDescription').value,
+            price:        parseFloat(document.getElementById('servicePrice').value) || null,
+            priceType:    document.getElementById('priceType').value,
+            campus:       document.getElementById('campus').value,
+            availability: document.getElementById('availability').value,
+            tags:         tags || null
         };
         
         const messageBox = document.getElementById('messageBox');
@@ -120,7 +123,7 @@ if (addServiceForm) {
         }
         
         try {
-            const response = await fetch(`${API_URL}/add-service`, {
+            const response = await fetch(`${API_URL}/services/publish`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(serviceData)

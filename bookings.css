@@ -2,11 +2,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: system-ui, 'Segoe UI', 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
-        }
-
-        body {
-            background: #eef2f9;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             padding: 24px;
             min-height: 100vh;
            
@@ -24,14 +20,14 @@
 
         /* Header with provider identity */
         .provider-header {
-            background: teal;
+            background: linear-gradient(135deg, rgba(67,172,192,0.97), #1a7a7a);
             padding: 20px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 16px;
-            border-bottom: 1px solid #2d4a55;
+            border-bottom: 1px solid #1a7a7a;
         }
 
         .provider-title h1 {
@@ -42,13 +38,13 @@
         }
 
         .provider-title p {
-            color: #8daeb9;
+            color: #7aa8a8;
             font-size: 14px;
             margin-top: 4px;
         }
 
         .provider-badge {
-            background: #2f5e6e;
+            background: #2a9a9a;
             padding: 8px 20px;
             border-radius: 40px;
             color: white;
@@ -86,7 +82,7 @@
         .stat-number {
             font-size: 32px;
             font-weight: 800;
-            color: orange;
+            color: #f97316;
         }
 
         /* Main content */
@@ -98,7 +94,7 @@
             font-size: 20px;
             font-weight: 600;
             margin: 24px 0 16px 0;
-            color: teal;
+            color: #3db8b8;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -128,12 +124,12 @@
         }
 
         .filter-btn.active-filter {
-            background: teal;
+            background: linear-gradient(135deg, rgba(67,172,192,0.97), #1a7a7a);
             color: white;
         }
 
         .filter-btn:hover:not(.active-filter) {
-            background: orange;
+            background: #f97316;
         }
 
         /* Bookings Table (Desktop) */
@@ -154,7 +150,7 @@
             text-align: left;
             padding: 18px 16px;
             background: #f9fbfe;
-            color: teal;
+            color: #3db8b8;
             font-weight: 600;
             border-bottom: 1px solid #e2e8f0;
         }
@@ -180,12 +176,12 @@
 
         .status-pending {
             background: #fff1df;
-            color: orange;
+            color: #f97316;
         }
 
         .status-completed {
             background: #e1ecf7;
-            color: teal;
+            color: #3db8b8;
         }
 
         .status-cancelled {
@@ -209,11 +205,12 @@
         }
 
         .badge-provider {
-            background: #eef2ff;
+            background: #e6f9f9;
             border-radius: 20px;
             padding: 4px 8px;
             font-size: 11px;
             font-weight: 500;
+            color: #2a9a9a;
         }
 
         /* empty state */

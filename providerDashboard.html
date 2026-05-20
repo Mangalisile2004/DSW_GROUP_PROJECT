@@ -1,214 +1,368 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <title>Campus Connect · Student Dashboard</title>
-  <!-- Google Fonts & Font Awesome -->
+  <title>Campus Connect · Provider Dashboard</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="providerDashboard.css">
 </head>
 <body>
 
-<!-- TOP BAR -->
-<div class="top-bar">
-  <div class="left-header">
-    <span id="menuToggle" class="hamburger"><i class="fas fa-bars"></i></span>
-     <img src="logo.png" alt="Campus Connect Logo" class="site-logo">
-      <h1><i>Campus Connect</i></h1>
+<!-- ══ TOP BAR ═══════════════════════════════════════════ -->
+<header class="top-bar">
+  <div class="top-left">
+    <button id="menuToggle" class="hamburger" aria-label="Open menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <div class="brand">
+      <img src="logo.png" alt="Campus Connect" class="site-logo">
+      <span class="brand-name">Campus<strong>Connect</strong></span>
+    </div>
   </div>
-  <div class="right-header">
-        <div class="profile-circle" id="profileCircleBtn">
-            👤
-        </div>
-        <button class="logout-btn-stylish" id="logoutBtnTop">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
-                    <polyline points="16 17 21 12 16 7"></polyline>
-                    <line x1="21" y1="12" x2="9" y2="12"></line>
-                </svg>
-                Logout
-        </button>
-  </div>
-</div>
 
-<!-- DRAWER (Navigation Sidebar) -->
+  <!-- Desktop nav links -->
+  <nav class="top-nav" aria-label="Main navigation">
+    <a class="top-nav-link active" data-section="dashboard">
+      <i class="fas fa-home"></i> Dashboard
+    </a>
+    <a class="top-nav-link" data-section="myservices">
+      <i class="fas fa-briefcase"></i> My Services
+    </a>
+    <a class="top-nav-link" data-section="favorites">
+      <i class="fas fa-heart"></i> Favourites
+    </a>
+    <a class="top-nav-link" data-section="settings">
+      <i class="fas fa-cog"></i> Settings
+    </a>
+  </nav>
+
+  <div class="top-right">
+    <button class="notif-btn" id="checkNotifBtn" aria-label="Notifications">
+      <i class="fas fa-bell"></i>
+      <span class="notif-dot" id="notifDot" style="display:none;"></span>
+    </button>
+    <button class="profile-circle" id="profileCircleBtn" aria-label="Profile">
+      <i class="fas fa-user"></i>
+    </button>
+    <button class="logout-btn-stylish" id="logoutBtnTop">
+      <i class="fas fa-sign-out-alt"></i>
+      <span>Logout</span>
+    </button>
+  </div>
+</header>
+
+<!-- ══ DRAWER ════════════════════════════════════════════ -->
 <div class="drawer-overlay" id="drawerOverlay">
-  <div class="drawer">
-    <div class="drawer-header"><i class="fas fa-bars"></i> Navigation</div>
-    <div class="drawer-nav-item" data-section="dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</div>
-    <div class="drawer-nav-item" data-section="favorites"><i class="fas fa-heart"></i> Favorites</div>
-    <div class="drawer-nav-item" data-section="myservices"><i class="fas fa-tools"></i> My Services</div>
-    <div class="drawer-nav-item" data-section="settings"><i class="fas fa-cog"></i> Settings</div>
-    <div class="drawer-nav-item" data-section="help"><i class="fas fa-question-circle"></i> Help & Support</div>
-  </div>
+  <nav class="drawer" role="navigation">
+    <div class="drawer-header">
+      <i class="fas fa-layer-group"></i>
+      <span>Navigation</span>
+      <button class="drawer-close" id="drawerClose" aria-label="Close"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="drawer-nav-item" data-section="dashboard">
+      <i class="fas fa-home"></i><span>Dashboard</span>
+    </div>
+    <div class="drawer-nav-item" data-section="myservices">
+      <i class="fas fa-briefcase"></i><span>My Services</span>
+    </div>
+    <div class="drawer-nav-item" data-section="favorites">
+      <i class="fas fa-heart"></i><span>Favourites</span>
+    </div>
+    <div class="drawer-nav-item" data-section="settings">
+      <i class="fas fa-sliders-h"></i><span>Settings</span>
+    </div>
+    <div class="drawer-nav-item" data-section="help">
+      <i class="fas fa-life-ring"></i><span>Help &amp; Support</span>
+    </div>
+  </nav>
 </div>
 
-<!-- DASHBOARD GRID -->
-<div class="dashboard-grid" id="dashboardGrid">
-  <!-- LEFT COLUMN -->
-  <div class="main-area">
-    <div class="stats-row">
-      <div class="stat-card">
-        <div class="stat-label">📅 Bookings</div>
+<!-- ══ PAGE CONTENT ══════════════════════════════════════ -->
+<main class="page-content">
+
+  <!-- Welcome Banner -->
+  <section class="welcome-banner">
+    <div class="welcome-inner">
+      <div class="welcome-text">
+        <p class="welcome-greeting">Welcome back <span id="welcomeName">Provider</span> 👋</p>
+        <h1 class="welcome-title">Your Campus Hustle Dashboard</h1>
+        <p class="welcome-sub">Manage your services, track bookings, and grow your campus business.</p>
+      </div>
+      <div class="welcome-cta">
+        <button class="btn-hero" id="addServiceBtn">
+          <i class="fas fa-plus-circle"></i> Add New Service
+        </button>
+        <button class="btn-hero-outline" id="viewBookingsBtn">
+          <i class="fas fa-calendar-alt"></i> View Bookings
+        </button>
+      </div>
+    </div>
+    <div class="welcome-illustration" aria-hidden="true">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <i class="fas fa-rocket welcome-icon"></i>
+    </div>
+  </section>
+
+  <!-- Stats Row (full width, 3 cards) -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-icon-wrap stat-icon--teal">
+        <i class="fas fa-calendar-check"></i>
+      </div>
+      <div class="stat-body">
         <div class="stat-number" id="bookingsCount">0</div>
-        <div class="stat-sub">upcoming</div>
+        <div class="stat-label">Total Bookings</div>
+        <div class="stat-sub"><i class="fas fa-arrow-trend-up"></i> upcoming</div>
       </div>
-      <div class="stat-card">
-        <div class="stat-label">🛠️ My Services</div>
+      <div class="stat-badge">Live</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon-wrap stat-icon--orange">
+        <i class="fas fa-briefcase"></i>
+      </div>
+      <div class="stat-body">
         <div class="stat-number" id="servicesCount">0</div>
-        <div class="stat-sub">active</div>
+        <div class="stat-label">Active Services</div>
+        <div class="stat-sub"><i class="fas fa-circle-check"></i> listed</div>
       </div>
+      <div class="stat-badge stat-badge--orange">Active</div>
     </div>
-
-    <div class="progress-section">
-      <div class="progress-header">
-        <h3>📈 Progress Tracker</h3>
-        <span class="progress-percent" id="progressPercent">0%</span>
+    <div class="stat-card">
+      <div class="stat-icon-wrap stat-icon--green">
+        <i class="fas fa-star"></i>
       </div>
-      <div class="progress-bar-bg">
-        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      <div class="stat-body">
+        <div class="stat-number">4.8</div>
+        <div class="stat-label">Avg. Rating</div>
+        <div class="stat-sub"><i class="fas fa-star"></i> out of 5.0</div>
       </div>
-      <div class="progress-message" id="progressMessage">🎯 Complete tasks to level up!</div>
-    </div>
-
-    <div class="actions-card">
-      <h3>⚡ Quick Actions</h3>
-      <div class="action-buttons">
-        <button class="action-btn" id="addServiceBtn">➕ Add New Service</button>
-        <button class="action-btn" id="viewBookingsBtn">📋 View Bookings</button>
-        <button class="action-btn" id="checkNotifBtn">🔔 Check Notifications</button>
-      </div>
+      <div class="stat-badge stat-badge--green">Top</div>
     </div>
   </div>
 
-  <!-- RIGHT COLUMN - NOTIFICATIONS & MESSAGES -->
-  <div class="sidebar-right">
-    <!-- Notifications Card -->
-    <div class="notif-card">
-      <div class="notif-header">
-        <h3>🔔 Notifications</h3>
-        <span class="notif-badge" id="notifBadge">0 new</span>
-        <button class="clear-notif-btn" id="clearNotifBtn">Clear All</button>
-      </div>
-      <div id="notificationsList">
-        <div class="empty-message">✨ No new notifications</div>
-      </div>
-    </div>
+  <!-- Dashboard Grid: main + sidebar -->
+  <div class="dashboard-grid" id="dashboardGrid">
 
-    <!-- Messages Card -->
-    <div class="messages-card">
-      <div class="messages-header">
-        <h3>💬 Messages</h3>
-        <button class="new-msg-btn" id="newMsgBtn">+ New</button>
-      </div>
-      <div class="messages-list" id="messagesList">
-        <div class="empty-message">💭 No messages yet</div>
-      </div>
-    </div>
+    <!-- LEFT MAIN COLUMN -->
+    <div class="main-area">
 
-    <!-- Tips Card -->
-    <div class="tips-card">
-      <h4>💡 Campus Tips</h4>
-      <ul class="tips-list">
-        <li>Add services to attract more clients</li>
-        <li>Complete bookings to level up</li>
-        <li>Message clients for faster response</li>
-        <li>Keep your profile updated</li>
-      </ul>
-    </div>
-  </div>
-</div>
+      <!-- Quick Action Tiles -->
+      <div class="actions-card">
+        <div class="card-header-row">
+          <i class="fas fa-bolt"></i>
+          <h3>Quick Actions</h3>
+        </div>
+        <div class="action-tiles">
+          <div class="action-tile tile--teal" onclick="document.getElementById('addServiceBtn').click()">
+            <div class="tile-icon-wrap"><i class="fas fa-plus-circle"></i></div>
+            <span class="tile-label">Add Service</span>
+            <span class="tile-desc">List a new offering</span>
+          </div>
+          <div class="action-tile tile--orange" onclick="document.getElementById('viewBookingsBtn').click()">
+            <div class="tile-icon-wrap"><i class="fas fa-calendar-alt"></i></div>
+            <span class="tile-label">Bookings</span>
+            <span class="tile-desc">See all requests</span>
+          </div>
+          <div class="action-tile tile--cyan" onclick="document.getElementById('checkNotifBtn').click()">
+            <div class="tile-icon-wrap"><i class="fas fa-bell"></i></div>
+            <span class="tile-label">Alerts</span>
+            <span class="tile-desc">Check updates</span>
+          </div>
+        </div>
+      </div>
 
-<!----------MODALS---------->
-<!-- PROFILE MODAL -->
+      <!-- Profile Progress -->
+      <div class="progress-section">
+        <div class="progress-header">
+          <div class="progress-title">
+            <div class="progress-icon"><i class="fas fa-chart-line"></i></div>
+            <div>
+              <h3>Profile Completion</h3>
+              <p class="progress-subtitle">Keep your profile strong to attract more clients</p>
+            </div>
+          </div>
+          <span class="progress-percent" id="progressPercent">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
+        </div>
+        <p class="progress-message" id="progressMessage">
+          <i class="fas fa-bullseye"></i> Complete tasks to level up!
+        </p>
+      </div>
+
+    </div><!-- /main-area -->
+
+    <!-- RIGHT SIDEBAR COLUMN -->
+    <div class="sidebar-right">
+
+      <!-- Notifications -->
+      <div class="notif-card">
+        <div class="notif-header">
+          <div class="card-header-row">
+            <i class="fas fa-bell"></i>
+            <h3>Notifications</h3>
+          </div>
+          <div class="notif-controls">
+            <span class="notif-badge" id="notifBadge">0 new</span>
+            <button class="clear-notif-btn" id="clearNotifBtn">
+              <i class="fas fa-trash-alt"></i>
+            </button>
+          </div>
+        </div>
+        <div class="notif-list" id="notificationsList">
+          <div class="empty-message">
+            <i class="fas fa-check-circle"></i>
+            <span>All caught up!</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages -->
+      <div class="messages-card">
+        <div class="messages-header">
+          <div class="card-header-row">
+            <i class="fas fa-comment-dots"></i>
+            <h3>Messages</h3>
+          </div>
+          <button class="new-msg-btn" id="newMsgBtn">
+            <i class="fas fa-pen"></i> New
+          </button>
+        </div>
+        <div class="messages-list" id="messagesList">
+          <div class="empty-message">
+            <i class="fas fa-inbox"></i>
+            <span>No messages yet</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tips -->
+      <div class="tips-card">
+        <div class="card-header-row">
+          <i class="fas fa-lightbulb"></i>
+          <h4>Pro Tips</h4>
+        </div>
+        <ul class="tips-list">
+          <li><i class="fas fa-check"></i> Add clear photos to your services</li>
+          <li><i class="fas fa-check"></i> Reply to bookings within 2 hours</li>
+          <li><i class="fas fa-check"></i> Keep your pricing competitive</li>
+          <li><i class="fas fa-check"></i> Update your profile regularly</li>
+        </ul>
+      </div>
+
+    </div><!-- /sidebar-right -->
+  </div><!-- /dashboard-grid -->
+
+</main>
+
+<!-- ══ MODALS ════════════════════════════════════════════ -->
+
+<!-- Profile Modal -->
 <div class="modal" id="profileModal">
   <div class="modal-card">
     <div class="modal-header">
-      <h3><i class="fas fa-user-circle"></i> My Profile</h3>
-      <button class="close-modal" id="closeModalBtn">&times;</button>
+      <div class="modal-title">
+        <i class="fas fa-user-circle"></i>
+        <h3>My Profile</h3>
+      </div>
+      <button class="close-modal" id="closeModalBtn" aria-label="Close"><i class="fas fa-times"></i></button>
     </div>
     <div class="avatar-upload">
       <div class="avatar-large" id="avatarLargeContainer">
-        <div class="avatar-placeholder" id="largeAvatarPlaceholder">👤</div>
-        <img id="largeAvatarImg" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+        <div class="avatar-placeholder" id="largeAvatarPlaceholder">
+          <i class="fas fa-user"></i>
+        </div>
+        <img id="largeAvatarImg" style="display:none;width:100%;height:100%;object-fit:cover;" alt="Profile">
       </div>
-      <button class="upload-btn-small" id="uploadPicBtn">📸 Upload Picture</button>
-      <input type="file" id="profilePicInput" accept="image/jpeg, image/png, image/jpg" style="display: none;">
+      <button class="upload-btn-small" id="uploadPicBtn">
+        <i class="fas fa-camera"></i> Upload Picture
+      </button>
+      <input type="file" id="profilePicInput" accept="image/jpeg,image/png,image/jpg" style="display:none;">
     </div>
     <div class="input-group">
-      <label>Full Name</label>
+      <label><i class="fas fa-id-card"></i> Full Name</label>
       <div class="inline-edit">
         <input type="text" id="fullNameInput" class="input-field" value="Emily Johnson">
-        <button class="edit-icon" id="editNameIcon">💾</button>
+        <button class="edit-icon" id="editNameIcon" title="Save"><i class="fas fa-save"></i></button>
       </div>
     </div>
     <div class="input-group">
-      <label>Email Address</label>
+      <label><i class="fas fa-envelope"></i> Email Address</label>
       <div class="inline-edit">
         <input type="email" id="emailInput" class="input-field" value="student@uj.ac.za">
-        <button class="edit-icon" id="editEmailIcon">💾</button>
+        <button class="edit-icon" id="editEmailIcon" title="Save"><i class="fas fa-save"></i></button>
       </div>
     </div>
     <div class="action-buttons">
-      <button class="btn-cancel" id="cancelModalBtn">Cancel</button>
-      <button class="btn-save" id="saveAllBtn">Save All Changes</button>
+      <button class="btn-cancel" id="cancelModalBtn"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn-save" id="saveAllBtn"><i class="fas fa-check"></i> Save Changes</button>
     </div>
   </div>
 </div>
-<!-- PASSWORD MODAL -->
+
+<!-- Password Modal -->
 <div class="modal" id="passwordModal">
   <div class="modal-card">
     <div class="modal-header">
-      <h3><i class="fas fa-key"></i> Change Password</h3>
-      <button class="close-modal" id="closePwModalBtn">&times;</button>
+      <div class="modal-title">
+        <i class="fas fa-lock"></i>
+        <h3>Change Password</h3>
+      </div>
+      <button class="close-modal" id="closePwModalBtn" aria-label="Close"><i class="fas fa-times"></i></button>
     </div>
     <div class="input-group">
-      <label>Current Password</label>
-      <input type="password" id="currentPassword" class="input-field" placeholder="Enter current password">
-      </div>
+      <label><i class="fas fa-key"></i> Current Password</label>
+      <input type="password" id="currentPassword" class="input-field" placeholder="Current password">
+    </div>
     <div class="input-group">
-      <label>New Password</label>
+      <label><i class="fas fa-lock"></i> New Password</label>
       <input type="password" id="newPassword" class="input-field" placeholder="New password (min 6 chars)">
     </div>
     <div class="input-group">
-      <label>Confirm Password</label>
+      <label><i class="fas fa-shield-alt"></i> Confirm Password</label>
       <input type="password" id="confirmPassword" class="input-field" placeholder="Confirm new password">
     </div>
     <div class="action-buttons">
-      <button class="btn-cancel" id="cancelPwBtn">Cancel</button>
-      <button class="btn-save" id="submitPwBtn">Update Password</button>
+      <button class="btn-cancel" id="cancelPwBtn"><i class="fas fa-times"></i> Cancel</button>
+      <button class="btn-save" id="submitPwBtn"><i class="fas fa-check"></i> Update Password</button>
     </div>
   </div>
 </div>
 
-<!-- VIEW BOOKINGS MODAL -->
+<!-- View Bookings Modal -->
 <div id="viewBookingsModal" class="modal">
-  <div class="modal-card" style="max-width: 500px;">
+  <div class="modal-card" style="max-width:520px;">
     <div class="modal-header">
-      <h3><i class="fas fa-calendar-alt"></i> My Bookings</h3>
-      <button class="close-modal" onclick="closeModal('viewBookingsModal')">&times;</button>
+      <div class="modal-title">
+        <i class="fas fa-calendar-alt"></i>
+        <h3>My Bookings</h3>
+      </div>
+      <button class="close-modal" onclick="closeModal('viewBookingsModal')" aria-label="Close"><i class="fas fa-times"></i></button>
     </div>
     <div id="bookingsListModal"></div>
     <div class="action-buttons">
-      <button class="btn-cancel" onclick="closeModal('viewBookingsModal')">Close</button>
+      <button class="btn-cancel" onclick="closeModal('viewBookingsModal')"><i class="fas fa-times"></i> Close</button>
     </div>
-    </div>
+  </div>
 </div>
 
-<!-- Success Toast Notification -->
-<div id="successToast" class="toast-message" style="display: none;"></div>
+<!-- Toast -->
+<div id="successToast" class="toast-message" style="display:none;"></div>
 
-<!-- Dynamic Content Container (for non-dashboard pages) -->
-<div id="mainContent" style="display: none;"></div>
+<!-- Dynamic Content (settings / services pages injected here) -->
+<div id="mainContent" style="display:none;"></div>
 
+<!-- ══ FOOTER ════════════════════════════════════════════ -->
 <footer>
-<span>📍 Campus Connect •Share skills• Stay connected</span>
- <br>
-<span>📧 CampusConnect@uni.ac.za</span>
+  <div class="footer-inner">
+    <span><i class="fas fa-map-marker-alt"></i> Campus Connect — Share skills, stay connected</span>
+    <span><i class="fas fa-envelope"></i> CampusConnect@uni.ac.za</span>
+  </div>
 </footer>
-  
 
 <script src="providerDashboard.js"></script>
 </body>
