@@ -6,7 +6,8 @@
     <title>Campus Connect – Find Student Services</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/dashboard.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboardCss.css">
 </head>
 <body>
 
@@ -352,7 +353,7 @@
     </div>
 </div>
 
-<script src="/dashboard.js" defer></script>
+<script src="dashboardJS.js"></script>
 <script>
 // Sync search inputs
 (function() {

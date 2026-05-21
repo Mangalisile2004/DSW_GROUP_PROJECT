@@ -94,74 +94,10 @@ app.get("/check-tables", async (req, res) => {
   }
 });
 
-app.get("/check-tables", async (req, res) => {
-app.get("/check-tables", async (req, res) => {
-  try {
-    // Test if Supabase is connected
-    const { data, error } = await supabase.from("service_seekers").select("count", { count: "exact", head: true });
-    
-    if (error) {
-      return res.json({ 
-        success: false, 
-        message: "Tables not created yet. Please run the SQL in Supabase first.",
-        error: error.message
-      });
-    }
-    
-    res.json({ 
-      success: true, 
-      message: "Supabase connected!",
-      tables: "Ready to use"
-    });
-  } catch (err) {
-    res.json({ success: false, message: err.message });
-  }
-});  try {
-    const { count: seekers, error: e1 } = await supabase
-      .from("service_seekers").select("*", { count: "exact", head: true });
-    const { count: providers, error: e2 } = await supabase
-      .from("service_providers").select("*", { count: "exact", head: true });
-    const { count: services, error: e3 } = await supabase
-      .from("services").select("*", { count: "exact", head: true });
-
-    if (e1 || e2 || e3) throw e1 || e2 || e3;
-    res.json({ success: true, seekers, providers, services });
-  } catch (err) {
-    res.status(500).json({ success: false, message: err.message });
-  }
-});// GET / — serves the homepage HTML file
+// GET / — serves the homepage HTML file
 app.get("/", (req, res) => {
   // path.join builds the correct path regardless of OS (Windows uses \, Linux /)
   res.sendFile(path.join(__dirname, "index.html"));
-});app.get("/check-tables", async (req, res) => {
-  try {
-    // Get counts from each table
-    const { count: seekers, error: e1 } = await supabase
-      .from("service_seekers")
-      .select("*", { count: "exact", head: true });
-    
-    const { count: providers, error: e2 } = await supabase
-      .from("service_providers")
-      .select("*", { count: "exact", head: true });
-    
-    const { count: services, error: e3 } = await supabase
-      .from("services")
-      .select("*", { count: "exact", head: true });
-
-    if (e1) console.error("Seekers error:", e1);
-    if (e2) console.error("Providers error:", e2);
-    if (e3) console.error("Services error:", e3);
-
-    res.json({ 
-      success: true, 
-      seekers: seekers || 0, 
-      providers: providers || 0, 
-      services: services || 0 
-    });
-  } catch (err) {
-    console.error("Check tables error:", err);
-    res.status(500).json({ success: false, message: err.message });
-  }
 });
 
 // ── AUTH ROUTES — SERVICE SEEKERS ───────────────────────────
@@ -645,23 +581,7 @@ app.use((err, req, res, next) => {
   console.error('Unhandled server error:', err);
   res.status(err.status || 500).json({ success: false, message: err.message || 'Internal server error' });
 });
-// ===== SERVE DASHBOARD =====
-app.get('/dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
 
-app.get('/dashboard.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
-
-app.get('/dashboard/index.html', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dashboard.html'));
-});
-
-// ===== SERVE PROVIDER DASHBOARD =====
-app.get('/provider-dashboard', (req, res) => {
-    res.sendFile(path.join(__dirname, 'providerDashboard.html'));
-});
 // ── START SERVER ─────────────────────────────────────────────
 // "0.0.0.0" means listen on ALL network interfaces —
 // not just localhost — so other devices on the campus network can reach it.

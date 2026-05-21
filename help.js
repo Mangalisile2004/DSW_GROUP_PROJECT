@@ -1,5 +1,5 @@
 // API CONFIGURATION 
-const API_URL = 'http://10.250.108.184:3000';
+const API_URL = 'http://localhost:3000';
 
 // FAQ Accordion Functionality 
 function toggleFAQ(element) {

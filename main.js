@@ -139,11 +139,13 @@ if (signupForm) {
             
             if (result.success) {
                 if (responseMsg) {
-                    responseMsg.innerHTML = '<span style="color: green;">✅ ' + result.message + ' Redirecting to login...</span>';
+                    responseMsg.innerHTML = '<span style="color: green;">✅ ' + result.message + ' Redirecting to dashboard...</span>';
                 }
+                // Store user email for auto-login
+                localStorage.setItem('userEmail', formData.email);
                 setTimeout(() => {
                     closeModal();
-                    window.location.href = 'login.html';
+                    window.location.href = 'dashboard.html';
                 }, 2000);
             } else {
                 if (responseMsg) {
@@ -201,11 +203,13 @@ if (providerForm) {
             
             if (result.success) {
                 if (responseMsg) {
-                    responseMsg.innerHTML = '<span style="color: green;">✅ ' + result.message + ' Redirecting to login...</span>';
+                    responseMsg.innerHTML = '<span style="color: green;">✅ ' + result.message + ' Redirecting to provider dashboard...</span>';
                 }
+                // Store provider email for auto-login
+                localStorage.setItem('providerEmail', formData.email);
                 setTimeout(() => {
                     closeProviderModal();
-                    window.location.href = 'login.html';
+                    window.location.href = 'providerDashboard.html';
                 }, 2000);
             } else {
                 if (responseMsg) {
