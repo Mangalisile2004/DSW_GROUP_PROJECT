@@ -1,10 +1,20 @@
-// main.js - FRONTEND ONLY
+// main.js - COMPLETE WORKING VERSION
+
+// Supabase Configuration
 const SUPABASE_URL = 'https://ncahfkosefyrvhbyjdlr.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5jYWhma29zZWZ5cnZoYnlqZGxyIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTI5OTAwOSwiZXhwIjoyMDk0ODc1MDA5fQ.6MZEqMZrQxqi9W1Ulck1itE2xvXfTCRYKWe5wHhWdZ8';
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// Initialize Supabase
+let supabase;
+try {
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log("✅ Supabase initialized successfully");
+} catch (error) {
+    console.error("❌ Failed to initialize Supabase:", error);
+}
 
 // MODAL FUNCTIONS
-function openModal() {
+window.openModal = function() {
     const modal = document.getElementById('signupModal');
     if (modal) {
         modal.style.display = 'flex';
@@ -17,14 +27,14 @@ function openModal() {
     }
 }
 
-function closeModal() {
+window.closeModal = function() {
     const modal = document.getElementById('signupModal');
     if (modal) {
         modal.style.display = 'none';
     }
 }
 
-function openProviderModal() {
+window.openProviderModal = function() {
     const modal = document.getElementById('providerModal');
     if (modal) {
         modal.style.display = 'flex';
@@ -37,7 +47,7 @@ function openProviderModal() {
     }
 }
 
-function closeProviderModal() {
+window.closeProviderModal = function() {
     const modal = document.getElementById('providerModal');
     if (modal) {
         modal.style.display = 'none';
@@ -50,15 +60,17 @@ window.onclick = function(event) {
     const providerModal = document.getElementById('providerModal');
     
     if (event.target === signupModal) {
-        closeModal();
+        window.closeModal();
     }
     if (event.target === providerModal) {
-        closeProviderModal();
+        window.closeProviderModal();
     }
 }
 
 // PASSWORD VALIDATION
 document.addEventListener('DOMContentLoaded', function() {
+    console.log("DOM loaded, setting up event listeners...");
+    
     // Seeker password confirmation
     const confirmPassword = document.getElementById('confirmPassword');
     if (confirmPassword) {
@@ -164,7 +176,7 @@ if (signupForm) {
             }
             
             setTimeout(() => {
-                closeModal();
+                window.closeModal();
                 window.location.href = 'dashboard.html';
             }, 2000);
             
@@ -254,7 +266,7 @@ if (providerForm) {
             }
             
             setTimeout(() => {
-                closeProviderModal();
+                window.closeProviderModal();
                 window.location.href = 'providerDashboard.html';
             }, 2000);
             
@@ -267,23 +279,21 @@ if (providerForm) {
     });
 }
 
-// ... (rest of your chatbot functions remain the same)
-
 // CHATBOT FUNCTIONS
-function toggleChat() {
+window.toggleChat = function() {
     const chatbot = document.getElementById('chatbot');
     if (chatbot) {
         chatbot.classList.toggle('minimized');
     }
 }
 
-async function sendChatMessage() {
+window.sendChatMessage = async function() {
     const input = document.getElementById('chat-input');
     const message = input.value.trim();
     
     if (!message) return;
     
-    addMessageToChat(message, 'user');
+    window.addMessageToChat(message, 'user');
     input.value = '';
     
     try {
@@ -293,14 +303,14 @@ async function sendChatMessage() {
             body: JSON.stringify({ message: message })
         });
         const data = await response.json();
-        addMessageToChat(data.response, 'bot');
+        window.addMessageToChat(data.response, 'bot');
     } catch (error) {
-        addMessageToChat('Sorry, I encountered an error. Please try again.', 'bot');
+        window.addMessageToChat('Sorry, I encountered an error. Please try again.', 'bot');
     }
 }
 
-function sendQuickMessage(message) {
-    addMessageToChat(message, 'user');
+window.sendQuickMessage = function(message) {
+    window.addMessageToChat(message, 'user');
     
     fetch('/chatbot', {
         method: 'POST',
@@ -309,14 +319,14 @@ function sendQuickMessage(message) {
     })
     .then(response => response.json())
     .then(data => {
-        addMessageToChat(data.response, 'bot');
+        window.addMessageToChat(data.response, 'bot');
     })
     .catch(error => {
-        addMessageToChat('Sorry, I encountered an error. Please try again.', 'bot');
+        window.addMessageToChat('Sorry, I encountered an error. Please try again.', 'bot');
     });
 }
 
-function addMessageToChat(message, sender) {
+window.addMessageToChat = function(message, sender) {
     const chatBody = document.getElementById('chat-body');
     if (!chatBody) return;
     
@@ -325,41 +335,30 @@ function addMessageToChat(message, sender) {
     messageDiv.innerHTML = `
         <div class="message-content">
             <i class="fas ${sender === 'bot' ? 'fa-robot' : 'fa-user'}"></i>
-            <p>${escapeHtml(message)}</p>
+            <p>${window.escapeHtml(message)}</p>
         </div>
     `;
     chatBody.appendChild(messageDiv);
     chatBody.scrollTop = chatBody.scrollHeight;
 }
 
-function handleChatKeyPress(event) {
+window.handleChatKeyPress = function(event) {
     if (event.key === 'Enter') {
-        sendChatMessage();
+        window.sendChatMessage();
     }
 }
 
-function toggleMenu() {
-    const navLinks = document.querySelector('.nav-links');
+window.toggleMenu = function() {
+    const navLinks = document.getElementById('navLinks');
     if (navLinks) {
         navLinks.classList.toggle('show');
     }
 }
 
-function escapeHtml(text) {
+window.escapeHtml = function(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
-// Make functions globally available
-window.openModal = openModal;
-window.closeModal = closeModal;
-window.openProviderModal = openProviderModal;
-window.closeProviderModal = closeProviderModal;
-window.toggleChat = toggleChat;
-window.sendChatMessage = sendChatMessage;
-window.sendQuickMessage = sendQuickMessage;
-window.handleChatKeyPress = handleChatKeyPress;
-window.toggleMenu = toggleMenu;
-
-console.log("✅ main.js loaded successfully");
+console.log("✅ main.js loaded successfully - All functions are ready!");

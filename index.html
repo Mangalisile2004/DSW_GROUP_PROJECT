@@ -8,6 +8,34 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
+    
+    <script>
+        // Emergency fallback - ensures buttons work even if main.js fails to load
+        window.openModal = function() {
+            const modal = document.getElementById('signupModal');
+            if (modal) modal.style.display = 'flex';
+        };
+        window.openProviderModal = function() {
+            const modal = document.getElementById('providerModal');
+            if (modal) modal.style.display = 'flex';
+        };
+        window.closeModal = function() {
+            const modal = document.getElementById('signupModal');
+            if (modal) modal.style.display = 'none';
+        };
+        window.closeProviderModal = function() {
+            const modal = document.getElementById('providerModal');
+            if (modal) modal.style.display = 'none';
+        };
+        window.toggleChat = function() {
+            const chatbot = document.getElementById('chatbot');
+            if (chatbot) chatbot.classList.toggle('minimized');
+        };
+        window.toggleMenu = function() {
+            const navLinks = document.getElementById('navLinks');
+            if (navLinks) navLinks.classList.toggle('show');
+        };
+    </script>
 </head>
 <body>
 
@@ -37,13 +65,13 @@
         <div class="chat-header" onclick="toggleChat()">
             <i class="fas fa-robot"></i>
             <span>Campus Assistant</span>
-            <button class="chat-close" onclick="toggleChat()">&#x2715;</button>
+            <button class="chat-close" onclick="toggleChat()">✕</button>
         </div>
         <div class="chat-body" id="chat-body">
             <div class="message bot">
                 <div class="message-content">
                     <i class="fas fa-robot"></i>
-                    <p>Hello! &#x1F44B; I&#x27;m your Campus Connect assistant. Ask me anything!</p>
+                    <p>Hello! 👋 I'm your Campus Connect assistant. Ask me anything!</p>
                 </div>
             </div>
         </div>
@@ -69,7 +97,7 @@
         <div class="hero-content">
             <span class="hero-badge"><i class="fas fa-bolt"></i> Student Marketplace</span>
             <h1>Turn Your <span class="accent">Talent</span> Into <span class="accent">Income</span></h1>
-            <p>Campus Connect helps UJ students discover, promote, and book skills &mdash; all on one platform.</p>
+            <p>Campus Connect helps UJ students discover, promote, and book skills — all on one platform.</p>
             <div class="hero-btns">
                 <button class="btn-teal" onclick="window.location.href='findServices.html'"><i class="fas fa-search"></i> Find Services</button>
                 <button class="btn-orange" onclick="openProviderModal()"><i class="fas fa-rocket"></i> Start Your Hustle</button>
@@ -85,9 +113,9 @@
                 <span class="section-chip"><i class="fas fa-graduation-cap"></i> About Us</span>
                 <h2>Built By Students, <span class="text-teal">For Students</span></h2>
                 <p>Campus Connect is a student-empowered marketplace designed to help UJ students turn their everyday skills into real income.</p>
-                <p>From braiding, nails, photography and design to tutoring and IT support &mdash; we bridge the gap between talent and opportunity.</p>
+                <p>From braiding, nails, photography and design to tutoring and IT support — we bridge the gap between talent and opportunity.</p>
                 <ul class="about-feats">
-                    <li><i class="fas fa-check-circle"></i> Free to join &mdash; no hidden fees</li>
+                    <li><i class="fas fa-check-circle"></i> Free to join — no hidden fees</li>
                     <li><i class="fas fa-check-circle"></i> Verified student providers only</li>
                     <li><i class="fas fa-check-circle"></i> Secure bookings &amp; payments</li>
                     <li><i class="fas fa-check-circle"></i> Active across all 4 UJ campuses</li>
@@ -126,16 +154,16 @@
     <!-- STATS BAR -->
     <section class="stats-bar" data-aos="fade-up" data-aos-duration="700">
         <div class="stat-item"><span class="stat-num">500+</span><span class="stat-lbl">Active Students</span></div>
-        <div class="stat-item"><span class="stat-num">1 200+</span><span class="stat-lbl">Services Listed</span></div>
+        <div class="stat-item"><span class="stat-num">1,200+</span><span class="stat-lbl">Services Listed</span></div>
         <div class="stat-item"><span class="stat-num">4</span><span class="stat-lbl">UJ Campuses</span></div>
-        <div class="stat-item"><span class="stat-num">R85 000+</span><span class="stat-lbl">Earned by Students</span></div>
+        <div class="stat-item"><span class="stat-num">R85,000+</span><span class="stat-lbl">Earned by Students</span></div>
     </section>
 
     <!-- POPULAR SERVICES -->
     <section class="services">
         <span class="section-chip" data-aos="fade-up"><i class="fas fa-fire"></i> Trending Now</span>
         <h2 data-aos="fade" data-aos-duration="800">Popular Services on Campus</h2>
-        <p data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">Explore what&apos;s trending across all campuses</p>
+        <p data-aos="fade-up" data-aos-duration="800" data-aos-delay="100">Explore what's trending across all campuses</p>
         <div class="cards" data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
             <div class="card tutoring">
                 <div class="card-overlay"></div>
@@ -165,7 +193,7 @@
         <div class="cta-blobs"><div class="cb1"></div><div class="cb2"></div></div>
         <div class="cta-inner">
             <h2>Ready to Join Campus Connect?</h2>
-            <p>Sign up free and start earning &mdash; or find the help you need today.</p>
+            <p>Sign up free and start earning — or find the help you need today.</p>
             <div class="cta-btns">
                 <button onclick="openModal()"><i class="fas fa-user-plus"></i> Sign Up Free</button>
                 <button class="help-btn" onclick="window.location.href='help.html'"><i class="fas fa-question-circle"></i> How It Works</button>
@@ -214,7 +242,7 @@
     <div id="providerModal" class="modal">
         <div class="modal-content" style="max-width:600px;">
             <button class="close" onclick="closeProviderModal()">&times;</button>
-            <h2>Start Your Hustle &mdash; Become a Provider</h2>
+            <h2>Start Your Hustle — Become a Provider</h2>
             <form id="popupProviderForm">
                 <label for="providerFullName">Full Names *</label>
                 <input type="text" id="providerFullName" name="providerFullName" placeholder="Enter your full name" required>
@@ -255,9 +283,16 @@
         </div>
     </div>
 
+    <!-- Load libraries first -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>AOS.init({ once:true, offset:60 });</script>
+    
+    <!-- Then load your main.js -->
+    <script src="main.js"></script>
+    
+    <!-- Then initialize AOS -->
+    <script>
+        AOS.init({ once: true, offset: 60 });
+    </script>
 </body>
 </html>
