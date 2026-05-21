@@ -322,7 +322,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (fullNameElem) fullNameElem.innerText = 'Guest User';
         if (studentIdElem) studentIdElem.innerText = 'Student ID: —';
         if (userEmailElem) userEmailElem.innerText = 'guest@campus.connect';
-        if (serviceNeededElem) serviceNeededElem.innerText = 'Explore services';
+        if (serviceNeededElviceNeededElem.innerText = 'Explore services';
 
         await loadProviders();
     }

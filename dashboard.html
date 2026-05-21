@@ -354,6 +354,17 @@
 
 <script src="/dashboard.js" defer></script>
 <script>
+    // Check if user is logged in
+const { data: { user }, error } = await supabase.auth.getUser();
+
+if (error || !user) {
+    // No user logged in, redirect to login page
+    window.location.href = 'index.html';
+} else {
+    // User is logged in, load their data
+    console.log('Logged in as:', user.email);
+    loadUserData(user.email); // Your existing function
+}
 // Sync search inputs
 (function() {
     const s1 = document.getElementById('searchInput');
